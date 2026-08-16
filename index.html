@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>リアプロ × MIO 募集比較 v1.1</title>
+<title>リアプロ × MIO 募集比較 v1.5</title>
 <style>
 :root{--navy:#17365d;--blue:#1f4e78;--gold:#b59b53;--bg:#f4f7fb;--line:#dbe3ea;--red:#c63838;--green:#168552}
 *{box-sizing:border-box}
@@ -179,8 +179,42 @@ function guaranteeYen(v,rent){
   return depositYen(v,rent);
 }
 
+
+function termInfo(v){
+  let x=String(v??"").normalize("NFKC").replace(/,/g,"").trim();
+  if(!x || /^(入力なし|なし|0|0円|0ヶ月|0か月|0ケ月|0ヵ月|-|－)$/.test(x)) return {type:"zero", value:0};
+  let m=x.match(/([0-9]+(?:\.[0-9]+)?)\s*(?:ヶ月|か月|ケ月|ヵ月|月)/);
+  if(m) return {type:"month", value:parseFloat(m[1])};
+  const y=yen(x);
+  return y===null ? {type:"unknown", value:null} : {type:"yen", value:y};
+}
+
+function termDiff(v1,rent1,v2,rent2){
+  const a=termInfo(v1), b=termInfo(v2);
+  if(a.type==="unknown" || b.type==="unknown") return false;
+  if(a.type==="zero" && b.type==="zero") return false;
+  if(a.type==="month" && b.type==="month") return Math.abs(a.value-b.value)>1e-9;
+  if(a.type==="yen" && b.type==="yen") return a.value!==b.value;
+
+  const toYen=(info,rent)=>{
+    if(info.type==="zero") return 0;
+    if(info.type==="yen") return info.value;
+    if(info.type==="month"){
+      const r=yen(rent);
+      return r===null ? null : Math.round(info.value*r);
+    }
+    return null;
+  };
+  const ay=toYen(a,rent1), by=toYen(b,rent2);
+  return ay!==null && by!==null && ay!==by;
+}
+
 function normLayout(v){
-  return String(v??"").normalize("NFKC").replace(/[\s　]/g,"").toUpperCase();
+  // 比較時のみ +S 表記を MIO 側の S 挿入表記へ統一
+  // 例: 1LDK+S → 1SLDK / 2DK+S → 2SDK / 1K+S → 1SK
+  let x=String(v??"").normalize("NFKC").replace(/[\s　]/g,"").toUpperCase();
+  x=x.replace(/^(\d+)(LDK|DK|K)\+S$/, (m,n,t)=>n+"S"+t);
+  return x;
 }
 
 function areaValue(v){
@@ -297,13 +331,13 @@ function showDiffOnly(){
         (yen(i.fee)!==null && yen(a.fee)!==null && yen(i.fee)!==yen(a.fee))],
 
       ["敷金", i.deposit, a.deposit,
-        (()=>{const x=depositYen(i.deposit,i.rent),y=depositYen(a.deposit,a.rent);return x!==null&&y!==null&&x!==y})()],
+        termDiff(i.deposit,i.rent,a.deposit,a.rent)],
 
       ["礼金", i.gift, a.gift,
-        (()=>{const x=giftYen(i.gift,i.rent),y=giftYen(a.gift,a.rent);return x!==null&&y!==null&&x!==y})()],
+        termDiff(i.gift,i.rent,a.gift,a.rent)],
 
       ["保証金", i.guarantee, a.guarantee,
-        (()=>{const x=guaranteeYen(i.guarantee,i.rent),y=guaranteeYen(a.guarantee,a.rent);return x!==null&&y!==null&&x!==y})()],
+        termDiff(i.guarantee,i.rent,a.guarantee,a.rent)],
 
       ["間取り", i.layout, a.layout,
         (normLayout(i.layout)!=="" && normLayout(a.layout)!=="" && normLayout(i.layout)!==normLayout(a.layout))],
@@ -475,17 +509,9 @@ function compareNow(){
     const a=A[hit];
     const rd=(yen(i.rent)!==null && yen(a.rent)!==null && yen(i.rent)!==yen(a.rent));
     const fd=(yen(i.fee)!==null && yen(a.fee)!==null && yen(i.fee)!==yen(a.fee));
-    const idp=depositYen(i.deposit,i.rent);
-    const adp=depositYen(a.deposit,a.rent);
-    const dd=(idp!==null && adp!==null && idp!==adp);
-
-    const igf=giftYen(i.gift,i.rent);
-    const agf=giftYen(a.gift,a.rent);
-    const gd=(igf!==null && agf!==null && igf!==agf);
-
-    const ign=guaranteeYen(i.guarantee,i.rent);
-    const agn=guaranteeYen(a.guarantee,a.rent);
-    const gnd=(ign!==null && agn!==null && ign!==agn);
+    const dd=termDiff(i.deposit,i.rent,a.deposit,a.rent);
+    const gd=termDiff(i.gift,i.rent,a.gift,a.rent);
+    const gnd=termDiff(i.guarantee,i.rent,a.guarantee,a.rent);
 
     const ily=normLayout(i.layout);
     const aly=normLayout(a.layout);
