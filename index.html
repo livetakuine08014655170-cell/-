@@ -122,6 +122,9 @@ function cleanName(s){
     // 「売布が丘 / 売布ガ丘 / 売布ヶ丘 / 売布ケ丘」などの表記揺れを比較時だけ統一
     // 画面表示は元データのまま。matchKey生成時のみ同一扱いになる。
     .replace(/[がガヶケ]丘/g,"ヶ丘")
+    // ジオタワー宝塚グランレジス THE NORTH の表記揺れだけ吸収。
+    // 「ジオタワー宝塚グランレジス」単体とは別物件のまま。
+    .replace(/ジオタワー宝塚\s*グランレジス\s*THE\s*(NORTH|SOUTH)/gi,(m,d)=>"ジオタワー宝塚グランレジスTHE"+d.toUpperCase())
     // 末尾のローマ数字を算用数字へ統一（NFKC後は Ⅱ→II になる）
     // 例：ヴィラミナミⅡ ⇔ ヴィラミナミ2 / RESIDENCEII ⇔ RESIDENCE2
     .replace(/(?:VIII|VII|VI|IV|V|III|II|I)$/i, m => ({I:"1",II:"2",III:"3",IV:"4",V:"5",VI:"6",VII:"7",VIII:"8"}[m.toUpperCase()] || m))
@@ -146,7 +149,16 @@ function matchKey(r){
   let joined=name+" "+room;
   let block=(joined.match(/(\d+)号棟/)||[])[1]||"";
   let base=norm(name.replace(/\d+号棟/g,""));
-  return base+"|"+block+"|"+roomNo(room);
+  let roomKey=roomNo(room);
+
+  // ジオタワー宝塚グランレジス THE NORTH / THE SOUTH だけ、
+  // リアプロの N-3203 / S-1410 と MIOの 3203 / 1410 を同じ部屋候補としてマッチ。
+  // 表示上の号室は元のまま残し、後段で「号室相違」として判定する。
+  if(/^ジオタワー宝塚グランレジスthe(?:north|south)$/i.test(base)){
+    roomKey=roomKey.replace(/^[NS]-/i,"");
+  }
+
+  return base+"|"+block+"|"+roomKey;
 }
 
 function yen(v){
@@ -324,6 +336,9 @@ function showDiffOnly(){
     const a=A[hit];
 
     const checks=[
+      ["号室", i.room, a.room,
+        (roomNo(i.room)!==roomNo(a.room))],
+
       ["賃料", i.rent, a.rent,
         (yen(i.rent)!==null && yen(a.rent)!==null && yen(i.rent)!==yen(a.rent))],
 
@@ -446,9 +461,9 @@ function showAppliedMio(){
 
     rows.push(`<tr>
       <td>${esc(cleanDisplayName(i.name))}</td>
-      <td>${esc(roomNo(i.room))}</td>
+      <td class="${roomd?"bad":""}">${esc(roomNo(i.room))}</td>
       <td>${esc(cleanDisplayName(a.name))}</td>
-      <td>${esc(roomNo(a.room))}</td>
+      <td class="${roomd?"bad":""}">${esc(roomNo(a.room))}</td>
       <td>${esc(a.code)}<button class="copy" onclick='copyText(${JSON.stringify(a.code)})'>コピー</button></td>
       <td class="ref-orange">${esc(i.company||"")}</td>
       <td class="ref-orange">${esc(i.ad||"")}</td>
@@ -507,6 +522,7 @@ function compareNow(){
 
     used.add(hit);
     const a=A[hit];
+    const roomd=(roomNo(i.room)!==roomNo(a.room));
     const rd=(yen(i.rent)!==null && yen(a.rent)!==null && yen(i.rent)!==yen(a.rent));
     const fd=(yen(i.fee)!==null && yen(a.fee)!==null && yen(i.fee)!==yen(a.fee));
     const dd=termDiff(i.deposit,i.rent,a.deposit,a.rent);
@@ -521,7 +537,7 @@ function compareNow(){
     const aar=areaValue(a.area);
     const ard=(iar!==null && aar!==null && Math.abs(iar-aar)>0.001);
 
-    const hasDiff=rd||fd||dd||gd||gnd||lyd||ard;
+    const hasDiff=roomd||rd||fd||dd||gd||gnd||lyd||ard;
     if(hasDiff) diff++; else same++;
 
     out.push(`<tr class="${hasDiff?"diff":"ok"}">
