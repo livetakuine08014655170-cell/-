@@ -459,6 +459,8 @@ function showAppliedMio(){
     const a=A.find(x=>matchKey(x)===ik);
     if(!a) continue;
 
+    const roomd=(roomNo(i.room)!==roomNo(a.room));
+
     rows.push(`<tr>
       <td>${esc(cleanDisplayName(i.name))}</td>
       <td class="${roomd?"bad":""}">${esc(roomNo(i.room))}</td>
