@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>ITANDI × ARNet クリーン比較 v17.3・業者名AD参考表示</title>
+<title>リアプロ × MIO 募集比較 v1.5 / 447最終テスト</title>
 <style>
 :root{--navy:#17365d;--blue:#1f4e78;--gold:#b59b53;--bg:#f4f7fb;--line:#dbe3ea;--red:#c63838;--green:#168552}
 *{box-sizing:border-box}
@@ -32,497 +32,36 @@ td{padding:7px 8px;border-bottom:1px solid #edf1f4}
 </style>
 </head>
 <body>
-<header><div class="wrap" style="padding:0"><h1 style="margin:0;font-size:24px">ITANDI × ARNet クリーン比較 v17.3・業者名AD参考表示</h1>
-<div style="font-size:13px;color:#e8eef5;margin-top:5px">読取部分は正常版をそのまま使用。比較部分だけ新規作成。</div></div></header>
+<header><div class="wrap" style="padding:0"><h1 style="margin:0;font-size:24px">リアプロ × MIO 募集比較</h1>
+<div style="font-size:13px;color:#e8eef5;margin-top:5px">リアプロの申込系を先に分離し、募集中物件をMIOと比較します。業者名・ADは比較せず参考表示。</div></div></header>
 <div class="wrap">
   <div class="grid">
-    <div class="card"><h3>① ITANDI PDF（複数選択OK）</h3><iframe id="itf" srcdoc="&lt;!doctype html&gt;
-&lt;html lang=&quot;ja&quot;&gt;
-&lt;head&gt;
-&lt;meta charset=&quot;utf-8&quot;&gt;&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,initial-scale=1&quot;&gt;
-&lt;title&gt;ITANDI マーカー読取テスト v17&lt;/title&gt;
-&lt;script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js&quot;&gt;&lt;/script&gt;
-&lt;style&gt;
-:root{--navy:#17365d;--blue:#1f4e78;--gold:#b59b53;--bg:#f4f7fb;--line:#dbe3ea}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);font-family:&quot;Yu Gothic&quot;,&quot;Meiryo&quot;,sans-serif;color:#27333d}
-header{background:linear-gradient(135deg,var(--navy),var(--blue));color:#fff;border-bottom:4px solid var(--gold);padding:20px}
-.wrap{max-width:1100px;margin:auto;padding:18px}header .wrap{padding:0}.panel{background:#fff;border:1px solid var(--line);border-radius:14px;padding:17px;margin-bottom:14px}
-h1{font-size:22px;margin:0 0 5px}.drop{border:2px dashed #afbdca;border-radius:12px;padding:18px;background:#fafcfe}input{width:100%;margin-top:10px}
-.small{font-size:12px;color:#6b7782}.actions{display:flex;gap:8px;margin-top:12px}button{border:0;border-radius:8px;padding:10px 14px;font-weight:700;cursor:pointer}
-.primary{background:var(--blue);color:#fff}.secondary{background:#e9eff4;color:var(--navy)}#error{display:none;background:#fdeaea;color:#982a2a;padding:10px;border-radius:8px;margin-top:10px}
-#result{display:none}table{width:100%;border-collapse:collapse;font-size:13px}th{background:var(--navy);color:#fff;text-align:left;padding:9px}td{padding:8px;border-bottom:1px solid #edf1f4}
-.note{font-size:12px;line-height:1.7;background:#fff8e7;border-left:4px solid var(--gold);padding:9px 11px;margin-top:12px}
-&lt;/style&gt;&lt;/head&gt;&lt;body&gt;
-&lt;header&gt;&lt;div class=&quot;wrap&quot;&gt;&lt;h1&gt;ITANDI マーカー読取テスト v17&lt;/h1&gt;&lt;div class=&quot;small&quot; style=&quot;color:#e8eef5&quot;&gt;「募集中 / 申込あり」を物件開始マーカーとして解析&lt;/div&gt;&lt;/div&gt;&lt;/header&gt;
-&lt;div class=&quot;wrap&quot;&gt;
-&lt;div class=&quot;panel&quot;&gt;&lt;div class=&quot;drop&quot;&gt;&lt;b&gt;ITANDI PDF&lt;/b&gt;&lt;input id=&quot;file&quot; type=&quot;file&quot; accept=&quot;.pdf&quot; multiple&gt;&lt;div id=&quot;fname&quot; class=&quot;small&quot;&gt;未選択&lt;/div&gt;&lt;/div&gt;
-&lt;div class=&quot;actions&quot;&gt;&lt;button id=&quot;run&quot; class=&quot;primary&quot;&gt;読み取る&lt;/button&gt;&lt;button id=&quot;reset&quot; class=&quot;secondary&quot;&gt;リセット&lt;/button&gt;&lt;/div&gt;&lt;div id=&quot;error&quot;&gt;&lt;/div&gt;
-&lt;div class=&quot;note&quot;&gt;今回もまず &lt;b&gt;物件名 / 号室 / 賃料&lt;/b&gt; だけ。行番号・座標は使わず、文字片を順番につないで「募集中」「申込あり」「時間前」「株式会社」「万円」などを目印にします。&lt;/div&gt;&lt;/div&gt;
-&lt;div id=&quot;result&quot; class=&quot;panel&quot;&gt;&lt;b&gt;&lt;span id=&quot;count&quot;&gt;0&lt;/span&gt;件&lt;/b&gt;&lt;table&gt;&lt;thead&gt;&lt;tr&gt;&lt;th&gt;ページ&lt;/th&gt;&lt;th&gt;状態&lt;/th&gt;&lt;th&gt;物件名&lt;/th&gt;&lt;th&gt;号室&lt;/th&gt;&lt;th&gt;管理会社&lt;/th&gt;&lt;th&gt;所在地&lt;/th&gt;&lt;th&gt;賃料&lt;/th&gt;&lt;th&gt;管理費・共益費&lt;/th&gt;&lt;th&gt;敷金&lt;/th&gt;&lt;th&gt;礼金&lt;/th&gt;&lt;th&gt;保証金&lt;/th&gt;&lt;th&gt;間取り&lt;/th&gt;&lt;th&gt;専有面積&lt;/th&gt;&lt;th&gt;内見可否&lt;/th&gt;&lt;th&gt;入居時期&lt;/th&gt;&lt;th&gt;AD&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody id=&quot;body&quot;&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/div&gt;
-&lt;/div&gt;
-&lt;script&gt;
-pdfjsLib.GlobalWorkerOptions.workerSrc=&quot;https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js&quot;;
-const $=id=&gt;document.getElementById(id);
-function n(s){return String(s??&quot;&quot;).normalize(&quot;NFKC&quot;).replace(/\s+/g,&quot;&quot;).trim()}
-function esc(s){return String(s??&quot;&quot;).replace(/[&amp;&lt;&gt;&quot;&#x27;]/g,c=&gt;({&quot;&amp;&quot;:&quot;&amp;amp;&quot;,&quot;&lt;&quot;:&quot;&amp;lt;&quot;,&quot;&gt;&quot;:&quot;&amp;gt;&quot;,&#x27;&quot;&#x27;:&quot;&amp;quot;&quot;,&quot;&#x27;&quot;:&quot;&amp;#39;&quot;}[c]))}
-function err(s){$(&quot;error&quot;).style.display=&quot;block&quot;;$(&quot;error&quot;).textContent=s}
-function matchAt(a,i,word,max=8){let s=&quot;&quot;;for(let j=i;j&lt;a.length&amp;&amp;j&lt;i+max;j++){s+=a[j];if(s===word)return j+1;if(!word.startsWith(s))break}return -1}
-function findWord(a,word,start=0){for(let i=start;i&lt;a.length;i++){let e=matchAt(a,i,word);if(e&gt;=0)return [i,e]}return null}
-function starts(a){
- let z=[];
- for(let i=0;i&lt;a.length;i++){
-  let e=matchAt(a,i,&quot;募集中&quot;); if(e&gt;=0){z.push([i,e,&quot;募集中&quot;]);i=e-1;continue}
-  e=matchAt(a,i,&quot;申込あり&quot;); if(e&gt;=0){z.push([i,e,&quot;申込あり&quot;]);i=e-1}
- }
- return z;
-}
-function titleRoom(parts){
- let a=parts.filter(Boolean);
- let room=&quot;&quot;;
- if(a.length){
-   let last=a[a.length-1];
-   if(/^[A-Za-z]?\d{1,4}(?:-\d+)?$/.test(last)){room=last;a.pop()}
-   else{
-     let m=last.match(/^(.*?)(0\d{3}|\d{3,4})$/);
-     if(m&amp;&amp;m[1]){a[a.length-1]=m[1];room=m[2]}
-   }
- }
- return {name:a.join(&quot;&quot;),room};
-}
-function parseBlock(a,state){
- // 条件更新の終わりは「○時間前 / ○日前 / ○分前」
- let time=findWord(a,&quot;時間前&quot;,0);
- let day=findWord(a,&quot;日前&quot;,0);
- let minute=findWord(a,&quot;分前&quot;,0);
- let candidates=[time,day,minute].filter(Boolean).sort((x,y)=&gt;x[0]-y[0]);
- let updateEnd=candidates.length?candidates[0]:null;
- let titleStart=updateEnd ? updateEnd[1] : 0;
-
- // 「兵庫県」を住所開始マーカーにする。
- // ただし「兵庫県住宅供給公社」は管理会社名なので、
- // その場合は次に出てくる「兵庫県」を所在地開始とする。
- let pref=findWord(a,&quot;兵庫県&quot;,titleStart);
- if(pref){
-   let afterPref=a.slice(pref[0],Math.min(a.length,pref[0]+12)).join(&quot;&quot;);
-   if(afterPref.startsWith(&quot;兵庫県住宅供給公社&quot;)){
-     let nextPref=findWord(a,&quot;兵庫県&quot;,pref[1]);
-     if(nextPref) pref=nextPref;
-   }
- }
- let preAddrEnd=pref ? pref[0] : a.length;
- let pre=a.slice(titleStart,preAddrEnd);
-
- // まず管理会社の開始位置を特定する。会社名内の数字を号室として誤認しないため、
- // 号室探索は管理会社より前だけに限定する。
- let companyMark=null;
- for(const w of [&quot;株式会社&quot;,&quot;有限会社&quot;,&quot;公社&quot;]){
-   let f=findWord(pre,w,0);
-   if(f &amp;&amp; (!companyMark || f[0]&lt;companyMark[0])) companyMark=f;
- }
- let roomSearchEnd=companyMark ? companyMark[0] : pre.length;
-
- // 号室の判定。数字号室＋英字1文字号室に対応。
- let room=&quot;&quot;, roomPos=-1;
- for(let i=roomSearchEnd-1;i&gt;=0;i--){
-   if(/^(?:[A-Za-z]|[A-Za-z]?\d{1,4}(?:-\d+)?)$/.test(pre[i])){
-     room=pre[i];
-     roomPos=i;
-     break;
-   }
-   let m=pre[i].match(/^(.*?)(0\d{3}|\d{3,4})$/);
-   if(m &amp;&amp; m[1]){
-     pre[i]=m[1];
-     room=m[2];
-     roomPos=i;
-     break;
-   }
- }
-
- // 戸建などでITANDIの号室が単独「0」の場合は号室なし扱い。
- // roomPosは物件名との境界として残し、物件名側へ0を戻さない。
- const zeroRoom = room===&quot;0&quot;;
- if(zeroRoom){ room=&quot;&quot;; }
-
- let name=&quot;&quot;;
- let company=&quot;&quot;;
- if(roomPos&lt;0){
-   // 駐車場など号室なし物件
-   if(companyMark){
-     name=pre.slice(0,companyMark[0]).join(&quot;&quot;).trim();
-     company=pre.slice(companyMark[0]).join(&quot;&quot;).trim();
-   }else{
-     name=pre.join(&quot;&quot;).trim();
-   }
- }else{
-   name=pre.slice(0,roomPos+1).join(&quot;&quot;);
-   if(zeroRoom){
-     name=name.replace(/0\s*$/,&quot;&quot;);
-   }else if(room &amp;&amp; name.endsWith(room)){
-     name=name.slice(0,-room.length);
-   }
-   name=name.trim();
-
-   // 号室が取れている通常物件は、
-   // 「号室の直後 ～ 所在地(兵庫県)の直前」を管理会社名として丸ごと取得する。
-   // これで「都市住建株式会社」「東急住宅リース株式会社」など
-   // 株式会社の前にある会社名本体を落とさない。
-   company=pre.slice(roomPos+1).join(&quot;&quot;).trim();
- }
-
- // 住宅供給公社だけは従来どおり表示を「公社」に統一。
- if(String(company||&quot;&quot;).trim()===&quot;兵庫県住宅供給公社&quot;){
-   company=&quot;公社&quot;;
- }
-
- // 公社のITANDI物件だけに付く前置きノイズを除去。
- // 管理会社が「公社」の場合だけなので、他社物件には影響しない。
- if(String(company||&quot;&quot;).trim()===&quot;公社&quot; &amp;&amp; /^物確不要7日以上前/.test(name)){
-   name=name.replace(/^物確不要7日以上前/,&quot;&quot;).trim();
- }
-
- // 住所開始から交通開始まで
- let transportStart=-1;
- if(pref){
-   for(let i=pref[1];i&lt;a.length;i++){
-     if([&quot;阪急&quot;,&quot;JR&quot;,&quot;ＪＲ&quot;,&quot;神戸電鉄&quot;,&quot;山陽&quot;,&quot;地下鉄&quot;,&quot;近鉄&quot;,&quot;京阪&quot;].some(w=&gt;matchAt(a,i,w)&gt;=0)){
-       transportStart=i;
-       break;
-     }
-   }
- }
-
- let address=&quot;&quot;;
- let traffic=&quot;&quot;;
- if(pref){
-   if(transportStart&gt;=0){
-     address=a.slice(pref[0],transportStart).join(&quot;&quot;).trim();
-
-     // 交通の終わりは最初の賃料直前
-     let rentPos=-1;
-     for(let i=transportStart;i&lt;a.length;i++){
-       if(/^\d+(?:\.\d+)?$/.test(a[i])){
-         let e=matchAt(a,i+1,&quot;万円&quot;,3);
-         if(e&gt;=0){rentPos=i;break}
-       }
-     }
-     if(rentPos&gt;=0) traffic=a.slice(transportStart,rentPos).join(&quot;&quot;).trim();
-     else traffic=a.slice(transportStart).join(&quot;&quot;).trim();
-   }else{
-     address=a.slice(pref[0]).join(&quot;&quot;).trim();
-   }
- }
-
- // 住所開始以降で最初の「○万円」を賃料として取得（v7維持）
- let rent=&quot;&quot;;
- let rentStart=pref ? pref[1] : preAddrEnd;
- let rentValuePos=-1, rentEndPos=-1;
- for(let i=rentStart;i&lt;a.length;i++){
-   if(/^\d+(?:\.\d+)?$/.test(a[i])){
-     let e=matchAt(a,i+1,&quot;万円&quot;,3);
-     if(e&gt;=0){
-       rent=a[i]+&quot;万円&quot;;
-       rentValuePos=i;
-       rentEndPos=e;
-       break;
-     }
-   }
- }
-
- // 賃料の直後が「管理費 → 共益費」の順。
- // 「入力なし」「なし」もそのまま値として扱う。
- let management=&quot;&quot;, common=&quot;&quot;;
- if(rentEndPos&gt;=0){
-   let i=rentEndPos;
-
-   function nextFeeValue(){
-     while(i&lt;a.length){
-       // 入力なし
-       let inp=matchAt(a,i,&quot;入力なし&quot;,8);
-       if(inp&gt;=0){ i=inp; return &quot;入力なし&quot;; }
-
-       // なし
-       let none=matchAt(a,i,&quot;なし&quot;,4);
-       if(none&gt;=0){ i=none; return &quot;なし&quot;; }
-
-       // ○○円（カンマ付き）
-       if(/^\d{1,3}(?:,\d{3})+$/.test(a[i]) || /^\d+$/.test(a[i])){
-         let val=a[i];
-         let yen=matchAt(a,i+1,&quot;円&quot;,2);
-         if(yen&gt;=0){ i=yen; return val+&quot;円&quot;; }
-       }
-
-       i++;
-     }
-     return &quot;&quot;;
-   }
-
-   management=nextFeeValue();
-   common=nextFeeValue();
- }
-
- // 管理費・共益費は1項目に統合。
- // どちらかに数値があればその数値を採用。
- // 両方に数値がある場合は両方を表示（情報を落とさない）。
- // どちらにも数値がなければ「入力なし」。
- function numericFee(v){
-   return /\d/.test(v||&quot;&quot;) &amp;&amp; !/入力なし|なし/.test(v||&quot;&quot;);
- }
- let fee=&quot;&quot;;
- if(numericFee(management) &amp;&amp; numericFee(common)){
-   fee = management===common ? management : management+&quot; / &quot;+common;
- }else if(numericFee(management)){
-   fee=management;
- }else if(numericFee(common)){
-   fee=common;
- }else{
-   fee=&quot;入力なし&quot;;
- }
-
- // 管理費・共益費の次は「敷金 → 礼金 → 保証金」。
- // v10で取得済みの management/common の直後から、同じ値読取ルールで3項目取得する。
- let deposit=&quot;入力なし&quot;, gift=&quot;入力なし&quot;, guarantee=&quot;入力なし&quot;;
- if(rentEndPos&gt;=0){
-   let j=rentEndPos;
-
-   function nextConditionValue(){
-     while(j&lt;a.length){
-       let inp=matchAt(a,j,&quot;入力なし&quot;,8);
-       if(inp&gt;=0){j=inp;return &quot;入力なし&quot;;}
-       let none=matchAt(a,j,&quot;なし&quot;,4);
-       if(none&gt;=0){j=none;return &quot;なし&quot;;}
-
-       // ○万円
-       if(/^\d+(?:\.\d+)?$/.test(a[j])){
-         let man=matchAt(a,j+1,&quot;万円&quot;,3);
-         if(man&gt;=0){let v=a[j]+&quot;万円&quot;;j=man;return v;}
-
-         // ○ヶ月 / ○か月 / ○ケ月 / ○カ月
-         for(const unit of [&quot;ヶ月&quot;,&quot;か月&quot;,&quot;ケ月&quot;,&quot;カ月&quot;]){
-           let mon=matchAt(a,j+1,unit,4);
-           if(mon&gt;=0){let v=a[j]+unit;j=mon;return v;}
-         }
-       }
-       // ○円
-       if(/^\d{1,3}(?:,\d{3})+$/.test(a[j]) || /^\d+$/.test(a[j])){
-         let yen=matchAt(a,j+1,&quot;円&quot;,2);
-         if(yen&gt;=0){let v=a[j]+&quot;円&quot;;j=yen;return v;}
-       }
-       j++;
-     }
-     return &quot;入力なし&quot;;
-   }
-
-   // 最初の2項目は管理費・共益費なので読み飛ばす
-   nextConditionValue();
-   nextConditionValue();
-   deposit=nextConditionValue();
-   gift=nextConditionValue();
-   guarantee=nextConditionValue();
- }
-
- // 間取り・専有面積
- // 条件欄より後ろから「1K / 2LDK / 3DK ...」と、その後の「○m2 / ○㎡」を拾う。
- let layout=&quot;&quot;, area=&quot;&quot;;
- const layoutRe=/^(?:\d+)?(?:R|K|DK|LDK|SK|SDK|SLDK|LK|L|D)(?:\+S)?$/i;
-
- for(let k=rentEndPos&gt;=0?rentEndPos:0;k&lt;a.length;k++){
-   if(layoutRe.test(a[k])){
-     layout=a[k].toUpperCase();
-     // 面積は間取りの後ろを優先
-     for(let m=k+1;m&lt;a.length;m++){
-       if(/^\d+(?:\.\d+)?$/.test(a[m])){
-         let unit2=matchAt(a,m+1,&quot;m2&quot;,3);
-         let unitSq=matchAt(a,m+1,&quot;㎡&quot;,2);
-         if(unit2&gt;=0){area=a[m]+&quot;m2&quot;;break;}
-         if(unitSq&gt;=0){area=a[m]+&quot;㎡&quot;;break;}
-       }
-     }
-     break;
-   }
- }
-
- // 内見可否 / 入居時期
- // 面積の後ろから、ITANDIの並び
- // 「内見開始日 → 入居可能時期 → 画像枚数」を順に拾う。
- let preview=&quot;&quot;, moveIn=&quot;&quot;;
-
- let searchStart=0;
- if(layout){
-   let li=a.findIndex(x=&gt;x===layout);
-   if(li&gt;=0) searchStart=li+1;
- }
-
- // 面積の位置を探して、その直後から条件を読む
- for(let k=searchStart;k&lt;a.length;k++){
-   if(/^\d+(?:\.\d+)?$/.test(a[k])){
-     let u1=matchAt(a,k+1,&quot;m2&quot;,3);
-     let u2=matchAt(a,k+1,&quot;㎡&quot;,2);
-     if(u1&gt;=0){searchStart=u1;break;}
-     if(u2&gt;=0){searchStart=u2;break;}
-   }
- }
-
- function nextStatusValue(start){
-   for(let i=start;i&lt;a.length;i++){
-     // 画像枚数以降には進まない
-     if(/^\d+$/.test(a[i])){
-       let img=matchAt(a,i+1,&quot;枚&quot;,2);
-       if(img&gt;=0) return {value:&quot;&quot;,next:i,stop:true};
-     }
-
-     for(const word of [&quot;即内見可&quot;,&quot;入力なし&quot;,&quot;相談&quot;,&quot;即入居可&quot;]){
-       let e=matchAt(a,i,word,8);
-       if(e&gt;=0)return {value:word,next:e,stop:false};
-     }
-
-     // 日付：2026年8月30日 など
-     if(/^20\d{2}$/.test(a[i])){
-       let val=a[i], j=i+1;
-       // 年
-       let e=matchAt(a,j,&quot;年&quot;,2);
-       if(e&gt;=0){val+=&quot;年&quot;;j=e;}
-       if(j&lt;a.length &amp;&amp; /^\d{1,2}$/.test(a[j])){val+=a[j];j++;}
-       e=matchAt(a,j,&quot;月&quot;,2);
-       if(e&gt;=0){val+=&quot;月&quot;;j=e;}
-       if(j&lt;a.length &amp;&amp; /^\d{1,2}$/.test(a[j])){val+=a[j];j++;}
-       e=matchAt(a,j,&quot;日&quot;,2);
-       if(e&gt;=0){
-         val+=&quot;日&quot;;j=e;
-       }else{
-         // 日付がない場合は「上旬 / 中旬 / 下旬」まで読む
-         for(const tail of [&quot;上旬&quot;,&quot;中旬&quot;,&quot;下旬&quot;]){
-           let te=matchAt(a,j,tail,4);
-           if(te&gt;=0){val+=tail;j=te;break;}
-         }
-       }
-       if(/20\d{2}年\d{1,2}月(?:\d{1,2}日|上旬|中旬|下旬)?/.test(val))
-         return {value:val,next:j,stop:false};
-     }
-
-     // 「9月下旬」「10月中旬」など
-     if(/^\d{1,2}$/.test(a[i])){
-       let mon=matchAt(a,i+1,&quot;月&quot;,2);
-       if(mon&gt;=0){
-         let val=a[i]+&quot;月&quot;;
-         let j=mon;
-         for(const tail of [&quot;上旬&quot;,&quot;中旬&quot;,&quot;下旬&quot;]){
-           let e=matchAt(a,j,tail,4);
-           if(e&gt;=0){val+=tail;j=e;break;}
-         }
-         return {value:val,next:j,stop:false};
-       }
-     }
-   }
-   return {value:&quot;&quot;,next:start,stop:false};
- }
-
- let p1=nextStatusValue(searchStart);
- if(p1.value){
-   preview=p1.value;
-   let p2=nextStatusValue(p1.next);
-   if(p2.value) moveIn=p2.value;
- }
-
- // AD / 階数 / 築年数
- // 画像枚数・取引態様は表示しない。
- let ad=&quot;&quot;, floors=&quot;&quot;, age=&quot;&quot;;
-
- // AD: 「200%」「14.6万円(税込)」など、画像枚数より後ろのAD値を拾う
- for(let i=searchStart;i&lt;a.length;i++){
-   if(/^\d+(?:\.\d+)?$/.test(a[i])){
-     let pct=matchAt(a,i+1,&quot;%&quot;,2);
-     if(pct&gt;=0){ad=a[i]+&quot;%&quot;;break;}
-
-     let man=matchAt(a,i+1,&quot;万円&quot;,3);
-     if(man&gt;=0){
-       let tail=a.slice(man,Math.min(a.length,man+6)).join(&quot;&quot;);
-       if(tail.startsWith(&quot;(税込)&quot;) || tail.startsWith(&quot;（税込）&quot;)){
-         ad=a[i]+&quot;万円(税込)&quot;;
-         break;
-       }
-     }
-   }
- }
-
- // 階数: 「7階建」「8階建」など
- for(let i=searchStart;i&lt;a.length;i++){
-   if(/^\d+$/.test(a[i])){
-     let e=matchAt(a,i+1,&quot;階建&quot;,4);
-     if(e&gt;=0){floors=a[i]+&quot;階建&quot;;break;}
-   }
- }
-
- // 築年数: 「新築」または「築10年」
- let nb=findWord(a,&quot;新築&quot;,searchStart);
- if(nb){
-   age=&quot;新築&quot;;
- }else{
-   for(let i=searchStart;i&lt;a.length;i++){
-     let b=matchAt(a,i,&quot;築&quot;,2);
-     if(b&gt;=0 &amp;&amp; b&lt;a.length &amp;&amp; /^\d+$/.test(a[b])){
-       let y=matchAt(a,b+1,&quot;年&quot;,2);
-       if(y&gt;=0){age=&quot;築&quot;+a[b]+&quot;年&quot;;break;}
-     }
-   }
- }
-
- return {state,name,room,company,address,rent,fee,deposit,gift,guarantee,layout,area,preview,moveIn,ad,floors,age};
-}
-async function pageRows(page,pno){
- let tc=await page.getTextContent({disableCombineTextItems:false});
- let a=tc.items.map(x=&gt;n(x.str)).filter(Boolean), ss=starts(a), out=[];
- for(let k=0;k&lt;ss.length;k++){
-   let [s,e,state]=ss[k], end=k+1&lt;ss.length?ss[k+1][0]:a.length;
-   let block=a.slice(e,end);
-   let r=parseBlock(block,state);
-   if(r&amp;&amp;r.name){
-     // 高司5丁目貸戸建（009/010）だけピンポイント補正
-     const joined=block.join(&quot;&quot;);
-     const tm=joined.match(/高司\s*5丁目\s*貸戸建\s*[（(]\s*(009|010)\s*[）)]/);
-     if(tm){ r.name=`高司5丁目貸戸建（${tm[1]}）`; r.room=&quot;&quot;; }
-     out.push({page:pno,...r});
-   }
- }
- return out;
-}
-async function run(){
- $(&quot;error&quot;).style.display=&quot;none&quot;;let files=[...$(&quot;file&quot;).files];if(!files.length)return err(&quot;PDFを選択してください。&quot;);$(&quot;run&quot;).disabled=true;
- try{
-  let rows=[],pageOffset=0;
-  for(const f of files){
-   let pdf=await pdfjsLib.getDocument({data:new Uint8Array(await f.arrayBuffer())}).promise;
-   for(let p=1;p&lt;=pdf.numPages;p++)rows.push(...await pageRows(await pdf.getPage(p),pageOffset+p));
-   pageOffset+=pdf.numPages;
-  }
-  $(&quot;count&quot;).textContent=rows.length;
-  $(&quot;body&quot;).innerHTML=rows.map(r=&gt;`&lt;tr&gt;&lt;td&gt;${r.page}&lt;/td&gt;&lt;td&gt;${esc(r.state)}&lt;/td&gt;&lt;td&gt;${esc(r.name)}&lt;/td&gt;&lt;td&gt;${esc(r.room)}&lt;/td&gt;&lt;td&gt;${esc(r.company)}&lt;/td&gt;&lt;td&gt;${esc(r.address)}&lt;/td&gt;&lt;td&gt;${esc(r.rent)}&lt;/td&gt;&lt;td&gt;${esc(r.fee)}&lt;/td&gt;&lt;td&gt;${esc(r.deposit)}&lt;/td&gt;&lt;td&gt;${esc(r.gift)}&lt;/td&gt;&lt;td&gt;${esc(r.guarantee)}&lt;/td&gt;&lt;td&gt;${esc(r.layout)}&lt;/td&gt;&lt;td&gt;${esc(r.area)}&lt;/td&gt;&lt;td&gt;${esc(r.preview)}&lt;/td&gt;&lt;td&gt;${esc(r.moveIn)}&lt;/td&gt;&lt;td&gt;${esc(r.ad)}&lt;/td&gt;&lt;/tr&gt;`).join(&quot;&quot;);
-  $(&quot;result&quot;).style.display=&quot;block&quot;;if(!rows.length)err(&quot;0件でした。&quot;);
- }catch(e){console.error(e);err(&quot;読み取りエラー：&quot;+e.message)}finally{$(&quot;run&quot;).disabled=false}
-}
-$(&quot;run&quot;).onclick=run;$(&quot;reset&quot;).onclick=()=&gt;location.reload();$(&quot;file&quot;).onchange=e=&gt;{const fs=[...e.target.files];$(&quot;fname&quot;).textContent=fs.length?`${fs.length}ファイル：${fs.map(f=&gt;f.name).join(&quot; / &quot;)}`:&quot;未選択&quot;};
-&lt;/script&gt;&lt;/body&gt;&lt;/html&gt;"></iframe></div>
-    <div class="card"><h3>② ARNet PDF（複数選択OK）</h3><iframe id="arf" srcdoc="&lt;!DOCTYPE html&gt;&#10;&lt;html lang=&quot;ja&quot;&gt;&#10;&lt;head&gt;&#10;&lt;meta charset=&quot;UTF-8&quot;&gt;&#10;&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,initial-scale=1&quot;&gt;&#10;&lt;title&gt;ARNet 抽出テスト v3&lt;/title&gt;&#10;&lt;script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js&quot;&gt;&lt;/script&gt;&#10;&lt;style&gt;&#10;:root{--navy:#17365d;--blue:#1f4e78;--gold:#b59b53;--bg:#f4f7fb;--text:#27333d;--muted:#6b7782;--border:#dbe3ea;--green:#168552;--red:#c53c3c}&#10;*{box-sizing:border-box}&#10;body{margin:0;font-family:&quot;Yu Gothic&quot;,&quot;Meiryo&quot;,system-ui,sans-serif;background:var(--bg);color:var(--text)}&#10;header{background:linear-gradient(135deg,var(--navy),var(--blue));color:#fff;border-bottom:4px solid var(--gold);padding:22px 16px}&#10;.inner,.wrap{max-width:1100px;margin:auto}&#10;header h1{font-size:24px;margin:0 0 6px} header p{margin:0;font-size:13px;color:#e8eef5}&#10;.wrap{padding:20px 14px 60px}&#10;.panel{background:#fff;border:1px solid var(--border);border-radius:14px;padding:18px;margin-bottom:15px;box-shadow:0 4px 18px rgba(31,78,120,.06)}&#10;h2{margin:0 0 14px;font-size:18px;color:var(--navy)}&#10;.drop{border:2px dashed #aebdca;border-radius:12px;padding:18px;background:#fafcfe;transition:.2s}&#10;.drop.drag{border-color:var(--gold);background:#fffaf0}&#10;input[type=file]{display:block;width:100%;margin-top:12px}.filename{margin-top:8px;color:var(--blue);font-size:13px}&#10;.actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:15px}&#10;button{border:0;border-radius:9px;padding:11px 17px;font-weight:700;cursor:pointer;font-size:14px}&#10;.primary{background:var(--blue);color:#fff}.secondary{background:#e9eff4;color:var(--navy)}&#10;.progress-wrap{display:none;margin-top:14px}.progress{height:10px;background:#e8edf2;border-radius:99px;overflow:hidden}.progress div{height:100%;width:0;background:linear-gradient(90deg,var(--gold),#e1bf67);transition:.2s}#progressText{font-size:12px;color:var(--muted);margin-top:6px}&#10;.error{display:none;background:#fde9e9;color:#982a2a;border:1px solid #efc8c8;padding:10px 12px;border-radius:8px;margin-top:12px}&#10;.note{background:#fff8e7;border-left:4px solid var(--gold);border-radius:6px;padding:10px 12px;font-size:12px;line-height:1.7;margin-top:13px}&#10;#results{display:none}.summary{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px}.card{background:#fff;border:1px solid var(--border);border-radius:10px;padding:12px 16px}.card b{font-size:24px;color:var(--navy)}&#10;.tablebox{overflow:auto;border:1px solid var(--border);border-radius:10px;max-height:680px}table{border-collapse:collapse;width:100%;min-width:720px;font-size:13px}th{position:sticky;top:0;background:var(--navy);color:#fff;padding:9px;text-align:left;white-space:nowrap}td{padding:8px 9px;border-bottom:1px solid #edf1f4;white-space:nowrap}tr:hover td{background:#f8fbfd}.copy{padding:3px 7px;margin-left:6px;background:#e9eff4;color:#17365d;font-size:11px}&#10;@media(max-width:700px){header h1{font-size:20px}}&#10;&lt;/style&gt;&#10;&lt;/head&gt;&#10;&lt;body&gt;&#10;&lt;header&gt;&lt;div class=&quot;inner&quot;&gt;&lt;h1&gt;📄 ARNet 抽出テスト v3&lt;/h1&gt;&lt;p&gt;物件番号 / 物件名 / 号室 / 賃料 / 共益費 / 敷金 / 礼金 / 保証金 / 間取り / 現況 を確認します。&lt;/p&gt;&lt;/div&gt;&lt;/header&gt;&#10;&lt;div class=&quot;wrap&quot;&gt;&#10;  &lt;div class=&quot;panel&quot;&gt;&#10;    &lt;h2&gt;① ARNet PDFを選択&lt;/h2&gt;&#10;    &lt;div class=&quot;drop&quot; id=&quot;drop&quot;&gt;&lt;b&gt;ここにPDFをドロップ&lt;/b&gt;&lt;br&gt;&lt;span style=&quot;font-size:12px;color:#6b7782&quot;&gt;または下から選択&lt;/span&gt;&lt;input type=&quot;file&quot; id=&quot;pdfFile&quot; accept=&quot;.pdf,application/pdf&quot; multiple&gt;&lt;div class=&quot;filename&quot; id=&quot;filename&quot;&gt;未選択&lt;/div&gt;&lt;/div&gt;&#10;    &lt;div class=&quot;actions&quot;&gt;&lt;button class=&quot;primary&quot; id=&quot;runBtn&quot;&gt;🔄 条件項目を読み取る&lt;/button&gt;&lt;button class=&quot;secondary&quot; id=&quot;resetBtn&quot;&gt;リセット&lt;/button&gt;&lt;/div&gt;&#10;    &lt;div class=&quot;progress-wrap&quot; id=&quot;progressWrap&quot;&gt;&lt;div class=&quot;progress&quot;&gt;&lt;div id=&quot;progressBar&quot;&gt;&lt;/div&gt;&lt;/div&gt;&lt;div id=&quot;progressText&quot;&gt;準備中...&lt;/div&gt;&lt;/div&gt;&#10;    &lt;div class=&quot;error&quot; id=&quot;error&quot;&gt;&lt;/div&gt;&#10;    &lt;div class=&quot;note&quot;&gt;&lt;b&gt;今回の新ARNet帳票専用テスト。&lt;/b&gt; 10桁の物件番号を1行の開始位置として、参考コードと同じ固定座標で読み取ります。敷金・礼金・保証金・間取り・現況を追加。比較判定はまだ行いません。&lt;/div&gt;&#10;  &lt;/div&gt;&#10;&#10;  &lt;div id=&quot;results&quot;&gt;&#10;    &lt;div class=&quot;summary&quot;&gt;&lt;div class=&quot;card&quot;&gt;ページ &lt;b id=&quot;pages&quot;&gt;0&lt;/b&gt;&lt;/div&gt;&lt;div class=&quot;card&quot;&gt;物件 &lt;b id=&quot;rows&quot;&gt;0&lt;/b&gt;&lt;/div&gt;&lt;/div&gt;&#10;    &lt;div class=&quot;panel&quot;&gt;&#10;      &lt;div class=&quot;tablebox&quot;&gt;&lt;table&gt;&lt;thead&gt;&lt;tr&gt;&lt;th&gt;ページ&lt;/th&gt;&lt;th&gt;物件番号&lt;/th&gt;&lt;th&gt;物件名&lt;/th&gt;&lt;th&gt;号室&lt;/th&gt;&lt;th&gt;賃料&lt;/th&gt;&lt;th&gt;共益費&lt;/th&gt;&lt;th&gt;敷金&lt;/th&gt;&lt;th&gt;礼金&lt;/th&gt;&lt;th&gt;保証金&lt;/th&gt;&lt;th&gt;間取り&lt;/th&gt;&lt;th&gt;面積&lt;/th&gt;&lt;th&gt;現況&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody id=&quot;body&quot;&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/div&gt;&#10;    &lt;/div&gt;&#10;  &lt;/div&gt;&#10;&lt;/div&gt;&#10;&lt;script&gt;&#10;pdfjsLib.GlobalWorkerOptions.workerSrc=&quot;https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js&quot;;&#10;const $=id=&gt;document.getElementById(id);&#10;let rows=[];&#10;function esc(s){return String(s??&quot;&quot;).replace(/[&amp;&lt;&gt;&quot;&#x27;]/g,c=&gt;({&quot;&amp;&quot;:&quot;&amp;amp;&quot;,&quot;&lt;&quot;:&quot;&amp;lt;&quot;,&quot;&gt;&quot;:&quot;&amp;gt;&quot;,&#x27;&quot;&#x27;:&quot;&amp;quot;&quot;,&quot;&#x27;&quot;:&quot;&amp;#39;&quot;}[c]))}&#10;function norm(s){return String(s??&quot;&quot;).normalize(&quot;NFKC&quot;).replace(/\s+/g,&quot;&quot;).trim()}&#10;function setProgress(p,t){$(&quot;progressWrap&quot;).style.display=&quot;block&quot;;$(&quot;progressBar&quot;).style.width=p+&quot;%&quot;;$(&quot;progressText&quot;).textContent=t}&#10;function showError(t){$(&quot;error&quot;).style.display=&quot;block&quot;;$(&quot;error&quot;).textContent=t}&#10;function clearError(){$(&quot;error&quot;).style.display=&quot;none&quot;;$(&quot;error&quot;).textContent=&quot;&quot;}&#10;function textItems(content,viewport){&#10; const out=[];&#10; for(const it of content.items){&#10;  const s=norm(it.str); if(!s) continue;&#10;  const pt=viewport.convertToViewportPoint(it.transform[4],it.transform[5]);&#10;  const h=Math.max(4,Math.abs(it.height||it.transform[3]||6)*viewport.scale);&#10;  const w=Math.max(1,(it.width||0)*viewport.scale);&#10;  out.push({text:s,x0:pt[0],x1:pt[0]+w,top:pt[1]-h,bottom:pt[1],cx:pt[0]+w/2,cy:pt[1]-h/2});&#10; }&#10; return out;&#10;}&#10;function join(ws){return ws.slice().sort((a,b)=&gt;a.top-b.top||a.x0-b.x0).map(w=&gt;w.text).join(&quot;&quot;)}&#10;function cell(ws,x0,x1,split,part=&quot;all&quot;){&#10; let a=ws.filter(w=&gt;w.cx&gt;=x0&amp;&amp;w.cx&lt;x1);&#10; if(part===&quot;top&quot;)a=a.filter(w=&gt;w.cy&lt;split);&#10; if(part===&quot;bottom&quot;)a=a.filter(w=&gt;w.cy&gt;=split);&#10; return join(a);&#10;}&#10;function roomCell(ws,x0,x1,split){return join(ws.filter(w=&gt;w.x0&gt;=x0&amp;&amp;w.x0&lt;x1&amp;&amp;w.cy&lt;split))}&#10;function cleanCell(s,labels=[]){s=norm(s);for(const l of labels)s=s.replaceAll(l,&quot;&quot;);return s.replace(/円$/,&quot;&quot;)}&#10;function parsePage(items,pageNo){&#10; const anchors=items.filter(w=&gt;w.cx&gt;=25&amp;&amp;w.cx&lt;80&amp;&amp;/^10\d{8}$/.test(w.text)).sort((a,b)=&gt;a.top-b.top);&#10; const out=[];&#10; for(let i=0;i&lt;anchors.length;i++){&#10;  const a=anchors[i], next=anchors[i+1];&#10;  const rowTop=a.top-3;&#10;  const rowBottom=next?Math.min(next.top-2,a.top+24.8):a.top+24.8;&#10;  const rw=items.filter(w=&gt;w.cy&gt;=rowTop&amp;&amp;w.cy&lt;rowBottom);&#10;  const split=a.top+10.2;&#10;  let name=cleanCell(cell(rw,75,158,split));&#10;  let room=cleanCell(roomCell(rw,158,180,split));&#10;  let floor=cleanCell(cell(rw,158,180,split,&quot;bottom&quot;));&#10;  if(/[-‐‑‒–—―ー]$/.test(room)){&#10;    const roomTail=String(floor||&quot;&quot;).match(/^(\d{1,4})(?=\(|（)/);&#10;    if(roomTail) room+=roomTail[1];&#10;    else {&#10;      const tailAfter=String(floor||&quot;&quot;).match(/^(.*?[)）])(\d{1,4})$/);&#10;      if(tailAfter) room+=tailAfter[2];&#10;    }&#10;  }&#10;  const rent=cleanCell(cell(rw,342,417,split),[&quot;賃&quot;]);&#10;  const fee=cleanCell(cell(rw,417,474,split,&quot;top&quot;),[&quot;共&quot;]);&#10;  const guarantee=cleanCell(cell(rw,474,530,split,&quot;top&quot;),[&quot;保&quot;]);&#10;  const deposit=cleanCell(cell(rw,530,590,split,&quot;top&quot;),[&quot;敷&quot;]);&#10;  const gift=cleanCell(cell(rw,530,590,split,&quot;bottom&quot;),[&quot;礼&quot;]);&#10;  const layout=cleanCell(cell(rw,207,236,split,&quot;bottom&quot;));&#10;  const area=cleanCell(cell(rw,236,268,split,&quot;bottom&quot;));&#10;  const status=cleanCell(cell(rw,180,207,split));&#10;  out.push({page:pageNo,code:a.text,name,room,rent,fee,deposit,gift,guarantee,layout,area,status});&#10; }&#10; return out;&#10;}&#10;async function run(){&#10; clearError(); const files=[...$(&quot;pdfFile&quot;).files]; if(!files.length){showError(&quot;ARNet PDFを選択してください。&quot;);return}&#10; $(&quot;runBtn&quot;).disabled=true;$(&quot;results&quot;).style.display=&quot;none&quot;;rows=[];&#10; try{&#10;  let totalPages=0,donePages=0;&#10;  for(let fi=0;fi&lt;files.length;fi++){&#10;   const file=files[fi];&#10;   const buf=await file.arrayBuffer();&#10;   const pdf=await pdfjsLib.getDocument({data:new Uint8Array(buf)}).promise;&#10;   totalPages+=pdf.numPages;&#10;   $(&quot;pages&quot;).textContent=totalPages;&#10;   for(let p=1;p&lt;=pdf.numPages;p++){&#10;    setProgress(10,`PDF解析中 ${fi+1}/${files.length}ファイル・${p}/${pdf.numPages}ページ`);&#10;    const page=await pdf.getPage(p);&#10;    const viewport=page.getViewport({scale:1,rotation:page.rotate});&#10;    const content=await page.getTextContent();&#10;    donePages++;&#10;    rows.push(...parsePage(textItems(content,viewport),donePages));&#10;   }&#10;  }&#10;  $(&quot;rows&quot;).textContent=rows.length;&#10;  render();setProgress(100,`完了：${rows.length}件`);$(&quot;results&quot;).style.display=&quot;block&quot;;$(&quot;results&quot;).scrollIntoView({behavior:&quot;smooth&quot;});&#10; }catch(e){console.error(e);showError(&quot;読み取れませんでした：&quot;+(e?.message||e))}finally{$(&quot;runBtn&quot;).disabled=false}&#10;}&#10;function render(){&#10; $(&quot;body&quot;).innerHTML=rows.map(r=&gt;`&lt;tr&gt;&lt;td&gt;${r.page}&lt;/td&gt;&lt;td&gt;${esc(r.code)} &lt;/td&gt;&lt;td&gt;${esc(r.name)} &lt;/td&gt;&lt;td&gt;${esc(r.room)}&lt;/td&gt;&lt;td&gt;${esc(r.rent)}&lt;/td&gt;&lt;td&gt;${esc(r.fee)}&lt;/td&gt;&lt;td&gt;${esc(r.deposit)}&lt;/td&gt;&lt;td&gt;${esc(r.gift)}&lt;/td&gt;&lt;td&gt;${esc(r.guarantee)}&lt;/td&gt;&lt;td&gt;${esc(r.layout)}&lt;/td&gt;&lt;td&gt;${esc(r.area)}&lt;/td&gt;&lt;td&gt;${esc(r.status)}&lt;/td&gt;&lt;/tr&gt;`).join(&quot;&quot;);&#10; document.querySelectorAll(&quot;.copy&quot;).forEach(b=&gt;b.onclick=()=&gt;navigator.clipboard?.writeText(b.dataset.copy||&quot;&quot;));&#10;}&#10;$(&quot;runBtn&quot;).onclick=run;$(&quot;resetBtn&quot;).onclick=()=&gt;location.reload();&#10;$(&quot;pdfFile&quot;).onchange=e=&gt;{const fs=[...e.target.files];$(&quot;filename&quot;).textContent=fs.length?`${fs.length}ファイル：${fs.map(f=&gt;f.name).join(&quot; / &quot;)}`:&quot;未選択&quot;};&#10;const drop=$(&quot;drop&quot;);[&quot;dragenter&quot;,&quot;dragover&quot;].forEach(ev=&gt;drop.addEventListener(ev,e=&gt;{e.preventDefault();drop.classList.add(&quot;drag&quot;)}));[&quot;dragleave&quot;,&quot;drop&quot;].forEach(ev=&gt;drop.addEventListener(ev,e=&gt;{e.preventDefault();drop.classList.remove(&quot;drag&quot;)}));drop.addEventListener(&quot;drop&quot;,e=&gt;{const fs=[...e.dataTransfer.files].filter(x=&gt;x.name.toLowerCase().endsWith(&quot;.pdf&quot;));if(!fs.length)return;const dt=new DataTransfer();fs.forEach(f=&gt;dt.items.add(f));$(&quot;pdfFile&quot;).files=dt.files;$(&quot;pdfFile&quot;).dispatchEvent(new Event(&quot;change&quot;));});&#10;&lt;/script&gt;&#10;&lt;/body&gt;&#10;&lt;/html&gt;&#10;"></iframe></div>
+    <div class="card"><h3>① リアプロ PDF</h3><iframe id="itf" srcdoc="&lt;!DOCTYPE html&gt;&#10;&lt;html lang=&quot;ja&quot;&gt;&#10;&lt;head&gt;&#10;&lt;meta charset=&quot;UTF-8&quot;&gt;&#10;&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,initial-scale=1&quot;&gt;&#10;&lt;title&gt;リアプロPDF 読取・申込判定&lt;/title&gt;&#10;&lt;script src=&quot;https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js&quot;&gt;&lt;/script&gt;&#10;&lt;style&gt;&#10;body{font-family:sans-serif;max-width:1120px;margin:30px auto;padding:18px}&#10;#drop{border:3px dashed #888;border-radius:12px;padding:42px 20px;text-align:center;font-size:20px;cursor:pointer}&#10;#drop.drag{background:#eee}&#10;#status{margin:18px 0;padding:14px;background:#f5f5f5;border-radius:8px;line-height:1.7}&#10;table{width:100%;border-collapse:collapse;margin-top:16px}&#10;th,td{border:1px solid #ccc;padding:8px;text-align:left}&#10;th{background:#eee;position:sticky;top:0}&#10;.bad{background:#fff3f3}&#10;input{display:none}&#10;.small{font-size:13px;color:#555;line-height:1.6}&#10;&lt;/style&gt;&#10;&lt;/head&gt;&#10;&lt;body&gt;&#10;&#10;&lt;h2&gt;リアプロPDF 読取・申込判定&lt;/h2&gt;&#10;&lt;div class=&quot;small&quot;&gt;&#10;比較用の固定項目を読取。オレンジの商談中・審査中等は「申込系」として別判定します。青い内装中等は通常募集として扱います。&#10;&lt;/div&gt;&#10;&#10;&lt;div id=&quot;drop&quot;&gt;リアプロPDFをここにドラッグ（複数可）&lt;br&gt;&lt;br&gt;またはクリック&lt;/div&gt;&#10;&lt;input id=&quot;file&quot; type=&quot;file&quot; accept=&quot;application/pdf&quot; multiple&gt;&#10;&#10;&lt;div id=&quot;status&quot;&gt;PDF待機中&lt;/div&gt;&#10;&lt;div id=&quot;out&quot;&gt;&lt;/div&gt;&#10;&#10;&lt;script&gt;&#10;pdfjsLib.GlobalWorkerOptions.workerSrc =&#10;  &quot;https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.worker.min.js&quot;;&#10;&#10;const drop=document.getElementById(&quot;drop&quot;);&#10;const file=document.getElementById(&quot;file&quot;);&#10;const status=document.getElementById(&quot;status&quot;);&#10;const out=document.getElementById(&quot;out&quot;);&#10;&#10;drop.onclick=()=&gt;file.click();&#10;file.onchange=()=&gt;file.files.length&amp;&amp;readPdfs([...file.files]);&#10;&#10;drop.addEventListener(&quot;dragover&quot;,e=&gt;{&#10;  e.preventDefault();&#10;  drop.classList.add(&quot;drag&quot;);&#10;});&#10;drop.addEventListener(&quot;dragleave&quot;,()=&gt;drop.classList.remove(&quot;drag&quot;));&#10;drop.addEventListener(&quot;drop&quot;,e=&gt;{&#10;  e.preventDefault();&#10;  drop.classList.remove(&quot;drag&quot;);&#10;  const fs=[...e.dataTransfer.files].filter(f=&gt;f.type===&quot;application/pdf&quot; || f.name.toLowerCase().endsWith(&quot;.pdf&quot;));&#10;  if(fs.length) readPdfs(fs);&#10;});&#10;&#10;function norm(s){&#10;  return String(s||&quot;&quot;)&#10;    .normalize(&quot;NFKC&quot;)&#10;    .replace(/\u00a0/g,&quot; &quot;)&#10;    .replace(/\s+/g,&quot; &quot;)&#10;    .trim();&#10;}&#10;&#10;function esc(s){&#10;  return String(s)&#10;    .replace(/&amp;/g,&quot;&amp;amp;&quot;)&#10;    .replace(/&lt;/g,&quot;&amp;lt;&quot;)&#10;    .replace(/&gt;/g,&quot;&amp;gt;&quot;);&#10;}&#10;&#10;function compact(s){&#10;  return String(s||&quot;&quot;).replace(/\s+/g,&quot;&quot;);&#10;}&#10;&#10;function hasTelWindow(items,i){&#10;  const w=items.slice(i,Math.min(items.length,i+6)).join(&quot;&quot;);&#10;  return /TEL[:：]/i.test(w) &amp;&amp; /FAX[:：]/i.test(w);&#10;}&#10;&#10;function isPropertyAddress(s){&#10;  const t=compact(s);&#10;  // 物件住所は「市 + 番地数字」を必須にする。&#10;  // 駅・徒歩表記が無い物件（例：ボナミ田中）も正しく拾う。&#10;  // 「宝塚市3丁目戸建て」のような建物名を住所と誤認しない。
+  // 一方「宝塚市安倉中5丁目11-8」のような駅表記なし住所は許可する。
+  if(/(?:戸建て?|マンション|ハイツ|コーポ|アパート|テラス|レジデンス|メゾン)$/i.test(t)) return false;
+  return /市/.test(t) &amp;&amp; /\d/.test(t);&#10;}&#10;&#10;function isHeaderWindow(items,i){&#10;  const w=items.slice(i,Math.min(items.length,i+20)).join(&quot;&quot;);&#10;  return w.includes(&quot;号室名&quot;) &amp;&amp; w.includes(&quot;賃料&quot;) &amp;&amp; w.includes(&quot;共益費&quot;);&#10;}&#10;&#10;function roomCandidate(s){&#10;  let x=compact(s);&#10;&#10;  // 「103号室」「502号室」など&#10;  x=x.replace(/号室$/,&quot;&quot;);&#10;&#10;  if(x===&quot;--&quot;) return &quot;--&quot;;&#10;&#10;  // 1文字英字だけの号室&#10;  if(/^[A-Za-z]$/.test(x)) return x;&#10;&#10;  // N-2403 / A-101 など&#10;  if(/^[A-Za-z]-\d{1,4}$/.test(x)) return x;&#10;&#10;  // A202&#10;  if(/^[A-Za-z]\d{2,5}$/.test(x)) return x;&#10;&#10;  // 11-204 / 2-G / 1-A&#10;  if(/^\d{1,4}-[A-Za-z0-9]{1,5}$/.test(x)) return x;&#10;&#10;  // 00401 / 00203 / 0101 / 0622 / 1205&#10;  if(/^\d{3,5}$/.test(x)){&#10;    if(/^(19|20)\d{2}$/.test(x)) return &quot;&quot;; // 1998 / 2026 は年&#10;    return x;&#10;  }&#10;&#10;  return &quot;&quot;;&#10;}&#10;&#10;function hasRoomContext(items,i,end){&#10;  const w=items.slice(i+1,Math.min(end,i+18)).join(&quot; &quot;);&#10;  return /階部分|空室|退去予定|退去|即入|相談|入居予定|入居|下旬|中旬|上旬/.test(w);&#10;}&#10;&#10;function moneyValues(items,start,end){&#10;  const txt=items.slice(start,end).join(&quot; &quot;);&#10;  const vals=[...txt.matchAll(/(\d{1,3}(?:,\d{3})+|\d{4,6})\s*円/g)]&#10;    .map(m=&gt;m[1].replace(/,/g,&quot;&quot;));&#10;  return vals;&#10;}&#10;&#10;function firstRent(items,start,end){&#10;  const vals=moneyValues(items,start,end);&#10;  return vals[0] || &quot;&quot;;&#10;}&#10;&#10;function firstCommonFee(items,start,end){&#10;  // リアプロの部屋行は「賃料 → 共益費」の順。&#10;  // 「なし」の場合は金額が出ないので、部屋ブロック先頭の表項目を見て判定する。&#10;  const txt=items.slice(start,end).join(&quot; &quot;);&#10;  const vals=moneyValues(items,start,end);&#10;  if(!vals.length) return &quot;&quot;;&#10;&#10;  const rentPos=txt.search(/(\d{1,3}(?:,\d{3})+|\d{4,6})\s*円/);&#10;  if(rentPos&lt;0) return &quot;&quot;;&#10;&#10;  const afterRent=txt.slice(rentPos).replace(/^(?:.*?円)/,&quot;&quot;).trim();&#10;&#10;  // 共益費欄が「なし」なら0円扱いではなく「なし」と表示&#10;  if(/^(?:なし|無|無し)/.test(afterRent)) return &quot;なし&quot;;&#10;&#10;  const m=afterRent.match(/(\d{1,3}(?:,\d{3})+|\d{4,6})\s*円/);&#10;  return m ? m[1].replace(/,/g,&quot;&quot;) : &quot;&quot;;&#10;}&#10;&#10;&#10;&#10;function rawFieldByPosition(posItems, roomIndex, x0, x1){&#10;  const roomObj = posItems[roomIndex];&#10;  if(!roomObj) return &quot;&quot;;&#10;&#10;  const ry = roomObj.y;&#10;&#10;  const candidates = posItems.filter(o =&gt; {&#10;    const dy = o.y - ry;&#10;    return o.x &gt;= x0 &amp;&amp; o.x &lt; x1 &amp;&amp;&#10;           dy &gt;= 2 &amp;&amp; dy &lt;= 16;&#10;  });&#10;&#10;  if(!candidates.length) return &quot;&quot;;&#10;&#10;  const s = candidates&#10;    .slice()&#10;    .sort((a,b)=&gt;a.x-b.x)&#10;    .map(o=&gt;o.text)&#10;    .join(&quot;&quot;)&#10;    .replace(/\s+/g,&quot;&quot;)&#10;    .trim();&#10;&#10;  if(!s) return &quot;&quot;;&#10;  if(/なし|無し|無/.test(s)) return &quot;なし&quot;;&#10;&#10;  // 0 / 0円&#10;  if(/^0(?:円)?$/.test(s)) return &quot;0&quot;;&#10;&#10;  // ○ヶ月 / ○か月 / ○ケ月 / ○ヵ月 / ○カ月&#10;  let m=s.match(/(\d+(?:\.\d+)?)(ヶ月|か月|ケ月|ヵ月|カ月)/);&#10;  if(m) return m[1]+&quot;ヶ月&quot;;&#10;&#10;  // 円金額&#10;  m=s.match(/(\d{1,3}(?:,\d{3})+|\d{1,6})円/);&#10;  if(m) return m[1].replace(/,/g,&quot;&quot;);&#10;&#10;  return &quot;&quot;;&#10;}&#10;&#10;function displayFee(v){&#10;  if(v===&quot;&quot; || v==null) return &quot;&quot;;&#10;  if(v===&quot;なし&quot;) return &quot;なし&quot;;&#10;  if(v===&quot;0&quot;) return &quot;0&quot;;&#10;  if(/ヶ月$/.test(v)) return v;&#10;  return Number(v).toLocaleString()+&quot;円&quot;;&#10;}&#10;&#10;&#10;function firstStatusAndTiming(items,start,end){&#10;  const arr=items.slice(start+1,Math.min(end,start+20)).map(norm).filter(Boolean);&#10;  let state=&quot;&quot;, timing=&quot;&quot;;&#10;&#10;  // 号室直後の「（○階部分）」等を飛ばし、状態を探す。&#10;  // 状態はPDF記載をそのまま返す（例：空室 / 退去予定 / 退去予定(08/31)）。&#10;  for(let i=0;i&lt;arr.length;i++){&#10;    const x=arr[i];&#10;    if(/^（?.*階部分.*）?$/.test(x) || /^\(?.*階部分.*\)?$/.test(x)) continue;&#10;    if(/^(空室|退去予定(?:\([^)]*\)|（[^）]*）)?|退去済(?:\([^)]*\)|（[^）]*）)?|入居中|建築中|改装中|内装中)$/.test(x)){&#10;      state=x;&#10;      // 状態の次に来る入居時期を探す。間取りまで来たら終了。&#10;      for(let j=i+1;j&lt;Math.min(arr.length,i+7);j++){&#10;        const y=arr[j];&#10;        if(/^\d+(?:R|K|DK|LDK)(?:\+?[A-Z])?$/.test(compact(y))) break;&#10;        if(/^(即入|相談|要相談|入居予定|\d{1,2}[\/月]\d{1,2}日?|\d{1,2}月(?:上旬|中旬|下旬|末|\d{1,2}日)|上旬|中旬|下旬|月末|期日指定.*)$/.test(y)){&#10;          timing=y;&#10;          break;&#10;        }&#10;      }&#10;      break;&#10;    }&#10;  }&#10;  return {state,timing};&#10;}&#10;&#10;function firstLayout(items,start,end){&#10;  const arr=items.slice(start,end).map(compact).filter(Boolean);&#10;&#10;  // 号室の後ろにある「状態・入居時期」の次に間取りが来る。&#10;  // 典型例: 1R / 1K / 1DK / 1LDK / 2DK / 2LDK / 2LDK+S / 5LDK&#10;  // SやKが複合しても拾えるよう少し広めに対応。&#10;  for(let i=1;i&lt;Math.min(arr.length,20);i++){&#10;    const x=arr[i]&#10;      .replace(/㎡.*$/,&quot;&quot;)&#10;      .replace(/m2.*$/i,&quot;&quot;)&#10;      .trim();&#10;&#10;    if(/^\d+(?:R|K|DK|LDK)(?:\+?[A-Z])?$/.test(x)) return x;&#10;    if(/^\d+(?:R|K|DK|LDK)\+[A-Z]$/.test(x)) return x;&#10;  }&#10;&#10;  return &quot;&quot;;&#10;}&#10;&#10;&#10;function firstArea(items,start,end){&#10;  const arr=items.slice(start,end).map(compact).filter(Boolean);&#10;  for(let i=1;i&lt;Math.min(arr.length,22);i++){&#10;    const x=arr[i];&#10;    let m=x.match(/^(\d+(?:\.\d+)?)㎡$/);&#10;    if(m) return m[1];&#10;    m=x.match(/^(\d+(?:\.\d+)?)(?:m2|m²)$/i);&#10;    if(m) return m[1];&#10;  }&#10;  return &quot;&quot;;&#10;}&#10;&#10;function companyForTel(posItems,telIndex){&#10;  const t=posItems[telIndex];&#10;  if(!t) return &quot;&quot;;&#10;  const cand=posItems.filter(o=&gt;&#10;    o.x&gt;=650 &amp;&amp;&#10;    o.y&gt;=t.y+18 &amp;&amp; o.y&lt;=t.y+36 &amp;&amp;&#10;    !/^(?:TEL|FAX)[:：]/i.test(o.text)&#10;  ).sort((a,b)=&gt;a.x-b.x);&#10;  return cand.map(o=&gt;o.text).join(&quot; &quot;).replace(/\s+/g,&quot; &quot;).trim();&#10;}&#10;&#10;function cleanBuildingParts(parts){&#10;  let arr=parts&#10;    .map(norm)&#10;    .filter(Boolean)&#10;    .filter(x=&gt;!/^(?:\/|FAX|TEL)$/i.test(x))&#10;    .filter(x=&gt;!/^[-–—]+$/.test(x));&#10;&#10;  while(arr.length &amp;&amp; /^[0-9:/()\-]+$/.test(arr[0])) arr.shift();&#10;&#10;  return arr.join(&quot; &quot;).replace(/\s+/g,&quot; &quot;).trim();&#10;}&#10;&#10;function findListings(items){&#10;  const tels=[];&#10;&#10;  for(let i=0;i&lt;items.length;i++){&#10;    if(hasTelWindow(items,i)){&#10;      if(!tels.length || i-tels[tels.length-1]&gt;4){&#10;        tels.push(i);&#10;      }&#10;    }&#10;  }&#10;&#10;  const listings=[];&#10;&#10;  for(let k=0;k&lt;tels.length;k++){&#10;    const tel=tels[k];&#10;    const nextTel=(k+1&lt;tels.length)?tels[k+1]:items.length;&#10;&#10;    let addr=-1;&#10;    for(let i=tel+1;i&lt;Math.min(nextTel,tel+35);i++){&#10;      if(isPropertyAddress(items[i])){&#10;        addr=i;&#10;        break;&#10;      }&#10;    }&#10;&#10;    if(addr===-1) continue;&#10;&#10;    const name=cleanBuildingParts(items.slice(tel+1,addr));&#10;    if(!name) continue;&#10;&#10;    let header=-1;&#10;    for(let i=addr+1;i&lt;Math.min(nextTel,addr+45);i++){&#10;      if(isHeaderWindow(items,i)){&#10;        header=i;&#10;        break;&#10;      }&#10;    }&#10;&#10;    if(header===-1) continue;&#10;&#10;    listings.push({&#10;      name,&#10;      company: companyForTel(window.__rpPosItems||[], tel),&#10;      telIndex:tel,&#10;      addressIndex:addr,&#10;      headerIndex:header,&#10;      endIndex:nextTel&#10;    });&#10;  }&#10;&#10;  return listings;&#10;}&#10;&#10;&#10;function orangeStampScore(ctx, viewport, roomObj){&#10;  const p1 = viewport.convertToViewportPoint(35, roomObj.y + 7);&#10;  const p2 = viewport.convertToViewportPoint(95, roomObj.y - 8);&#10;&#10;  let x0 = Math.floor(Math.min(p1[0], p2[0]));&#10;  let x1 = Math.ceil(Math.max(p1[0], p2[0]));&#10;  let y0 = Math.floor(Math.min(p1[1], p2[1]));&#10;  let y1 = Math.ceil(Math.max(p1[1], p2[1]));&#10;&#10;  x0=Math.max(0,x0); y0=Math.max(0,y0);&#10;  x1=Math.min(ctx.canvas.width,x1); y1=Math.min(ctx.canvas.height,y1);&#10;&#10;  if(x1&lt;=x0 || y1&lt;=y0) return 0;&#10;&#10;  const im=ctx.getImageData(x0,y0,x1-x0,y1-y0).data;&#10;  let orange=0;&#10;&#10;  for(let i=0;i&lt;im.length;i+=4){&#10;    const r=im[i], g=im[i+1], b=im[i+2], a=im[i+3];&#10;    if(a&lt;100) continue;&#10;&#10;    if(&#10;      r&gt;=175 &amp;&amp;&#10;      g&gt;=55 &amp;&amp; g&lt;=185 &amp;&amp;&#10;      b&lt;=135 &amp;&amp;&#10;      r&gt;=g+45 &amp;&amp;&#10;      g&gt;=b+15&#10;    ){&#10;      orange++;&#10;    }&#10;  }&#10;  return orange;&#10;}&#10;&#10;async function readPdfs(files){&#10;  status.textContent=`読み取り中... ${files.length}ファイル`;&#10;  out.innerHTML=&quot;&quot;;&#10;&#10;  try{&#10;    const rows=[];&#10;    let listingCount=0;&#10;    let totalPages=0;&#10;&#10;    for(let fi=0;fi&lt;files.length;fi++){&#10;      const f=files[fi];&#10;      status.textContent=`読み取り中... ${fi+1}/${files.length}：${f.name}`;&#10;      const data=new Uint8Array(await f.arrayBuffer());&#10;&#10;      const pdf=await pdfjsLib.getDocument({&#10;      data,&#10;      cMapUrl:&quot;https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/cmaps/&quot;,&#10;      cMapPacked:true,&#10;      useWorkerFetch:false,&#10;      useSystemFonts:true&#10;    }).promise;&#10;&#10;      totalPages += pdf.numPages;&#10;&#10;      for(let p=1;p&lt;=pdf.numPages;p++){&#10;      const page=await pdf.getPage(p);&#10;      const tc=await page.getTextContent();&#10;&#10;      const viewport=page.getViewport({scale:1.8});&#10;      const canvas=document.createElement(&quot;canvas&quot;);&#10;      canvas.width=Math.ceil(viewport.width);&#10;      canvas.height=Math.ceil(viewport.height);&#10;      const ctx=canvas.getContext(&quot;2d&quot;,{willReadFrequently:true});&#10;      await page.render({canvasContext:ctx,viewport}).promise;&#10;&#10;      const posItems=tc.items&#10;        .map(x=&gt;({&#10;          text:norm(x.str),&#10;          x:(x.transform ? x.transform[4] : 0),&#10;          y:(x.transform ? x.transform[5] : 0)&#10;        }))&#10;        .filter(o=&gt;o.text);&#10;&#10;      const items=posItems.map(o=&gt;o.text);&#10;      window.__rpPosItems=posItems;&#10;&#10;      const listings=findListings(items);&#10;&#10;      // ページ先頭物件がTEL順序の都合で漏れる場合を補完。&#10;      const firstKnownHeader=listings.length?listings[0].headerIndex:items.length;&#10;      let topHeader=-1;&#10;      for(let i=0;i&lt;firstKnownHeader;i++){ if(isHeaderWindow(items,i)){topHeader=i;break;} }&#10;      if(topHeader&gt;=0){&#10;        let topAddr=-1;&#10;        for(let i=topHeader-1;i&gt;=0;i--){ if(isPropertyAddress(items[i])){topAddr=i;break;} }&#10;        if(topAddr&gt;0){&#10;          let ni=topAddr-1;&#10;          while(ni&gt;=0 &amp;&amp; (!norm(items[ni]) || /空室一覧表|頁|現在/.test(norm(items[ni])))) ni--;&#10;          const topName=ni&gt;=0?norm(items[ni]):&quot;&quot;;&#10;          if(topName &amp;&amp; !listings.some(x=&gt;x.headerIndex===topHeader)){&#10;            const endIndex=listings.length?listings[0].telIndex:items.length;&#10;            listings.unshift({name:topName,company:&quot;&quot;,telIndex:-1,addressIndex:topAddr,headerIndex:topHeader,endIndex});&#10;          }&#10;        }&#10;      }&#10;&#10;      listingCount+=listings.length;&#10;&#10;      for(const listing of listings){&#10;        const start=listing.headerIndex+1;&#10;        const end=listing.endIndex;&#10;&#10;        const roomStarts=[];&#10;&#10;        for(let i=start;i&lt;end;i++){&#10;          // 号室欄だけを見る。周辺判定は437室版を維持。&#10;          const po=posItems[i];&#10;          if(!po || po.x&lt;50 || po.x&gt;115) continue;&#10;&#10;          let room=compact(items[i]).replace(/号室$/,&quot;&quot;);&#10;          if(!room) continue;&#10;&#10;          // 従来号室 + 特殊号室（1 / 6 / 1C / 000B / 3B / II-102 / B1F 等）&#10;          const normalRoom=!!roomCandidate(items[i]);&#10;          const specialRoom=/^(?:\d{1,2}|\d{1,4}[A-Za-z]|[A-Za-z]{1,4}\d{1,5}|[IVX]+-\d{1,4}|B\d+[A-Za-z]?)$/.test(room);&#10;          if(!normalRoom &amp;&amp; !specialRoom) continue;&#10;&#10;          if(!hasRoomContext(items,i,end)) continue;&#10;&#10;          roomStarts.push({&#10;            index:i,&#10;            room&#10;          });&#10;        }&#10;&#10;        const unique=[];&#10;        const seen=new Set();&#10;&#10;        for(const r of roomStarts){&#10;          if(seen.has(r.index)) continue;&#10;          seen.add(r.index);&#10;          unique.push(r);&#10;        }&#10;&#10;        for(let n=0;n&lt;unique.length;n++){&#10;          const r=unique[n];&#10;          const next=(n+1&lt;unique.length)?unique[n+1].index:end;&#10;&#10;          // 賃料はv7で正しく取れていた方法をそのまま固定。&#10;          const rent=firstRent(items,r.index,next);&#10;&#10;          // 共益費・敷金だけ固定列から取得。&#10;          // 空欄なら後続列の金額を拾わず空欄のまま。&#10;          const commonFee=rawFieldByPosition(posItems,r.index,315,390);&#10;          const deposit=rawFieldByPosition(posItems,r.index,390,475);&#10;          const guarantee=rawFieldByPosition(posItems,r.index,455,535);&#10;          const keyMoney=rawFieldByPosition(posItems,r.index,535,605);&#10;          const layout=firstLayout(items,r.index,next);&#10;          const area=firstArea(items,r.index,next);&#10;          const ad=rawFieldByPosition(posItems,r.index,745,815);&#10;          const st=firstStatusAndTiming(items,r.index,next);&#10;&#10;          const orangeScore=orangeStampScore(ctx,viewport,posItems[r.index]);&#10;          const orangeApplied = orangeScore &gt;= 18;&#10;&#10;          rows.push({&#10;            page:p,&#10;            building:listing.name,&#10;            room:r.room,&#10;            rent,&#10;            commonFee,&#10;            deposit,&#10;            guarantee,&#10;            keyMoney,&#10;            layout,&#10;            area,&#10;            company:listing.company||&quot;&quot;,&#10;            ad,&#10;            state:st.state,&#10;            timing:st.timing,&#10;            orangeApplied,&#10;            orangeScore&#10;          });&#10;        }&#10;        }&#10;      }&#10;    }&#10;&#10;    const orangeRows=rows.filter(r=&gt;r.orangeApplied);&#10;&#10;    status.innerHTML=&#10;      `抽出完了：&lt;b&gt;${rows.length}室&lt;/b&gt; / ${totalPages}ページ / ${files.length}ファイル` +&#10;      `　オレンジ申込判定：&lt;b style=&quot;color:#d96b1f&quot;&gt;${orangeRows.length}室&lt;/b&gt;`;&#10;&#10;    let h=&#x27;&lt;table&gt;&lt;thead&gt;&lt;tr&gt;&lt;th&gt;#&lt;/th&gt;&lt;th&gt;頁&lt;/th&gt;&lt;th&gt;建物名&lt;/th&gt;&lt;th&gt;号室&lt;/th&gt;&lt;th&gt;状態&lt;/th&gt;&lt;th&gt;入居時期&lt;/th&gt;&lt;th&gt;間取り&lt;/th&gt;&lt;th&gt;面積&lt;/th&gt;&lt;th&gt;賃料&lt;/th&gt;&lt;th&gt;共益費&lt;/th&gt;&lt;th&gt;敷金&lt;/th&gt;&lt;th&gt;保証金&lt;/th&gt;&lt;th&gt;礼金&lt;/th&gt;&lt;th&gt;業者名&lt;/th&gt;&lt;th&gt;AD&lt;/th&gt;&lt;th&gt;申込&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody&gt;&#x27;;&#10;&#10;    rows.forEach((r,i)=&gt;{&#10;      h+=`&lt;tr${r.orangeApplied?&#x27; class=&quot;bad&quot;&#x27;:&#x27;&#x27;}&gt;&#10;        &lt;td&gt;${i+1}&lt;/td&gt;&#10;        &lt;td&gt;${r.page}&lt;/td&gt;&#10;        &lt;td&gt;${esc(r.building)}&lt;/td&gt;&#10;        &lt;td&gt;${esc(r.room)}&lt;/td&gt;&#10;        &lt;td&gt;${esc(r.state||&#x27;&#x27;)}&lt;/td&gt;&#10;        &lt;td&gt;${esc(r.timing||&#x27;&#x27;)}&lt;/td&gt;&#10;        &lt;td&gt;${esc(r.layout||&#x27;&#x27;)}&lt;/td&gt;&#10;        &lt;td&gt;${r.area ? esc(r.area)+&#x27;㎡&#x27; : &#x27;&#x27;}&lt;/td&gt;&#10;        &lt;td&gt;${displayFee(r.rent)}&lt;/td&gt;&#10;        &lt;td&gt;${displayFee(r.commonFee)}&lt;/td&gt;&#10;        &lt;td&gt;${displayFee(r.deposit)}&lt;/td&gt;&#10;        &lt;td&gt;${displayFee(r.guarantee)}&lt;/td&gt;&#10;        &lt;td&gt;${displayFee(r.keyMoney)}&lt;/td&gt;&#10;        &lt;td style=&quot;font-weight:800;color:#e67e00&quot;&gt;${esc(r.company||&#x27;&#x27;)}&lt;/td&gt;&#10;        &lt;td style=&quot;font-weight:800;color:#e67e00&quot;&gt;${esc(r.ad||&#x27;&#x27;)}&lt;/td&gt;&#10;        &lt;td style=&quot;font-weight:800;color:#d96b1f&quot;&gt;${r.orangeApplied?&#x27;申込系&#x27;:&#x27;&#x27;}&lt;/td&gt;&#10;      &lt;/tr&gt;`;&#10;    });&#10;&#10;    h+=&#x27;&lt;/tbody&gt;&lt;/table&gt;&#x27;;&#10;    out.innerHTML=h;&#10;&#10;  }catch(err){&#10;    status.textContent=&quot;PDF読み取りエラー: &quot;+(err.message||err);&#10;  }&#10;}&#10;&lt;/script&gt;&#10;&#10;&lt;/body&gt;&#10;&lt;/html&gt;&#10;"></iframe></div>
+    <div class="card"><h3>② MIO PDF</h3><iframe id="arf" srcdoc="&lt;!DOCTYPE html&gt;&#10;&lt;html lang=&quot;ja&quot;&gt;&#10;&lt;head&gt;&#10;&lt;meta charset=&quot;UTF-8&quot;&gt;&#10;&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,initial-scale=1&quot;&gt;&#10;&lt;title&gt;ARNet 抽出テスト v3&lt;/title&gt;&#10;&lt;script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js&quot;&gt;&lt;/script&gt;&#10;&lt;style&gt;&#10;:root{--navy:#17365d;--blue:#1f4e78;--gold:#b59b53;--bg:#f4f7fb;--text:#27333d;--muted:#6b7782;--border:#dbe3ea;--green:#168552;--red:#c53c3c}&#10;*{box-sizing:border-box}&#10;body{margin:0;font-family:&quot;Yu Gothic&quot;,&quot;Meiryo&quot;,system-ui,sans-serif;background:var(--bg);color:var(--text)}&#10;header{background:linear-gradient(135deg,var(--navy),var(--blue));color:#fff;border-bottom:4px solid var(--gold);padding:22px 16px}&#10;.inner,.wrap{max-width:1100px;margin:auto}&#10;header h1{font-size:24px;margin:0 0 6px} header p{margin:0;font-size:13px;color:#e8eef5}&#10;.wrap{padding:20px 14px 60px}&#10;.panel{background:#fff;border:1px solid var(--border);border-radius:14px;padding:18px;margin-bottom:15px;box-shadow:0 4px 18px rgba(31,78,120,.06)}&#10;h2{margin:0 0 14px;font-size:18px;color:var(--navy)}&#10;.drop{border:2px dashed #aebdca;border-radius:12px;padding:18px;background:#fafcfe;transition:.2s}&#10;.drop.drag{border-color:var(--gold);background:#fffaf0}&#10;input[type=file]{display:block;width:100%;margin-top:12px}.filename{margin-top:8px;color:var(--blue);font-size:13px}&#10;.actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:15px}&#10;button{border:0;border-radius:9px;padding:11px 17px;font-weight:700;cursor:pointer;font-size:14px}&#10;.primary{background:var(--blue);color:#fff}.secondary{background:#e9eff4;color:var(--navy)}&#10;.progress-wrap{display:none;margin-top:14px}.progress{height:10px;background:#e8edf2;border-radius:99px;overflow:hidden}.progress div{height:100%;width:0;background:linear-gradient(90deg,var(--gold),#e1bf67);transition:.2s}#progressText{font-size:12px;color:var(--muted);margin-top:6px}&#10;.error{display:none;background:#fde9e9;color:#982a2a;border:1px solid #efc8c8;padding:10px 12px;border-radius:8px;margin-top:12px}&#10;.note{background:#fff8e7;border-left:4px solid var(--gold);border-radius:6px;padding:10px 12px;font-size:12px;line-height:1.7;margin-top:13px}&#10;#results{display:none}.summary{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px}.card{background:#fff;border:1px solid var(--border);border-radius:10px;padding:12px 16px}.card b{font-size:24px;color:var(--navy)}&#10;.tablebox{overflow:auto;border:1px solid var(--border);border-radius:10px;max-height:680px}table{border-collapse:collapse;width:100%;min-width:720px;font-size:13px}th{position:sticky;top:0;background:var(--navy);color:#fff;padding:9px;text-align:left;white-space:nowrap}td{padding:8px 9px;border-bottom:1px solid #edf1f4;white-space:nowrap}tr:hover td{background:#f8fbfd}.copy{padding:3px 7px;margin-left:6px;background:#e9eff4;color:#17365d;font-size:11px}&#10;@media(max-width:700px){header h1{font-size:20px}}&#10;&lt;/style&gt;&#10;&lt;/head&gt;&#10;&lt;body&gt;&#10;&lt;header&gt;&lt;div class=&quot;inner&quot;&gt;&lt;h1&gt;📄 ARNet 抽出テスト v3&lt;/h1&gt;&lt;p&gt;物件番号 / 物件名 / 号室 / 賃料 / 共益費 / 敷金 / 礼金 / 保証金 / 間取り / 現況 を確認します。&lt;/p&gt;&lt;/div&gt;&lt;/header&gt;&#10;&lt;div class=&quot;wrap&quot;&gt;&#10;  &lt;div class=&quot;panel&quot;&gt;&#10;    &lt;h2&gt;① ARNet PDFを選択（複数可）&lt;/h2&gt;&#10;    &lt;div class=&quot;drop&quot; id=&quot;drop&quot;&gt;&lt;b&gt;ここにPDFをドロップ&lt;/b&gt;&lt;br&gt;&lt;span style=&quot;font-size:12px;color:#6b7782&quot;&gt;または下から選択&lt;/span&gt;&lt;input type=&quot;file&quot; id=&quot;pdfFile&quot; accept=&quot;.pdf,application/pdf&quot; multiple&gt;&lt;div class=&quot;filename&quot; id=&quot;filename&quot;&gt;未選択&lt;/div&gt;&lt;/div&gt;&#10;    &lt;div class=&quot;actions&quot;&gt;&lt;button class=&quot;primary&quot; id=&quot;runBtn&quot;&gt;🔄 条件項目を読み取る&lt;/button&gt;&lt;button class=&quot;secondary&quot; id=&quot;resetBtn&quot;&gt;リセット&lt;/button&gt;&lt;/div&gt;&#10;    &lt;div class=&quot;progress-wrap&quot; id=&quot;progressWrap&quot;&gt;&lt;div class=&quot;progress&quot;&gt;&lt;div id=&quot;progressBar&quot;&gt;&lt;/div&gt;&lt;/div&gt;&lt;div id=&quot;progressText&quot;&gt;準備中...&lt;/div&gt;&lt;/div&gt;&#10;    &lt;div class=&quot;error&quot; id=&quot;error&quot;&gt;&lt;/div&gt;&#10;    &lt;div class=&quot;note&quot;&gt;&lt;b&gt;今回の新ARNet帳票専用テスト。&lt;/b&gt; 10桁の物件番号を1行の開始位置として、参考コードと同じ固定座標で読み取ります。敷金・礼金・保証金・間取り・現況を追加。比較判定はまだ行いません。&lt;/div&gt;&#10;  &lt;/div&gt;&#10;&#10;  &lt;div id=&quot;results&quot;&gt;&#10;    &lt;div class=&quot;summary&quot;&gt;&lt;div class=&quot;card&quot;&gt;ページ &lt;b id=&quot;pages&quot;&gt;0&lt;/b&gt;&lt;/div&gt;&lt;div class=&quot;card&quot;&gt;物件 &lt;b id=&quot;rows&quot;&gt;0&lt;/b&gt;&lt;/div&gt;&lt;/div&gt;&#10;    &lt;div class=&quot;panel&quot;&gt;&#10;      &lt;div class=&quot;tablebox&quot;&gt;&lt;table&gt;&lt;thead&gt;&lt;tr&gt;&lt;th&gt;ページ&lt;/th&gt;&lt;th&gt;物件番号&lt;/th&gt;&lt;th&gt;物件名&lt;/th&gt;&lt;th&gt;号室&lt;/th&gt;&lt;th&gt;賃料&lt;/th&gt;&lt;th&gt;共益費&lt;/th&gt;&lt;th&gt;敷金&lt;/th&gt;&lt;th&gt;礼金&lt;/th&gt;&lt;th&gt;保証金&lt;/th&gt;&lt;th&gt;間取り&lt;/th&gt;&lt;th&gt;面積&lt;/th&gt;&lt;th&gt;現況&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody id=&quot;body&quot;&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/div&gt;&#10;    &lt;/div&gt;&#10;  &lt;/div&gt;&#10;&lt;/div&gt;&#10;&lt;script&gt;&#10;pdfjsLib.GlobalWorkerOptions.workerSrc=&quot;https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js&quot;;&#10;const $=id=&gt;document.getElementById(id);&#10;let rows=[];&#10;function esc(s){return String(s??&quot;&quot;).replace(/[&amp;&lt;&gt;&quot;&#x27;]/g,c=&gt;({&quot;&amp;&quot;:&quot;&amp;amp;&quot;,&quot;&lt;&quot;:&quot;&amp;lt;&quot;,&quot;&gt;&quot;:&quot;&amp;gt;&quot;,&#x27;&quot;&#x27;:&quot;&amp;quot;&quot;,&quot;&#x27;&quot;:&quot;&amp;#39;&quot;}[c]))}&#10;function norm(s){return String(s??&quot;&quot;).normalize(&quot;NFKC&quot;).replace(/\s+/g,&quot;&quot;).trim()}&#10;function setProgress(p,t){$(&quot;progressWrap&quot;).style.display=&quot;block&quot;;$(&quot;progressBar&quot;).style.width=p+&quot;%&quot;;$(&quot;progressText&quot;).textContent=t}&#10;function showError(t){$(&quot;error&quot;).style.display=&quot;block&quot;;$(&quot;error&quot;).textContent=t}&#10;function clearError(){$(&quot;error&quot;).style.display=&quot;none&quot;;$(&quot;error&quot;).textContent=&quot;&quot;}&#10;function textItems(content,viewport){&#10; const out=[];&#10; for(const it of content.items){&#10;  const s=norm(it.str); if(!s) continue;&#10;  const pt=viewport.convertToViewportPoint(it.transform[4],it.transform[5]);&#10;  const h=Math.max(4,Math.abs(it.height||it.transform[3]||6)*viewport.scale);&#10;  const w=Math.max(1,(it.width||0)*viewport.scale);&#10;  out.push({text:s,x0:pt[0],x1:pt[0]+w,top:pt[1]-h,bottom:pt[1],cx:pt[0]+w/2,cy:pt[1]-h/2});&#10; }&#10; return out;&#10;}&#10;function join(ws){return ws.slice().sort((a,b)=&gt;a.top-b.top||a.x0-b.x0).map(w=&gt;w.text).join(&quot;&quot;)}&#10;function cell(ws,x0,x1,split,part=&quot;all&quot;){&#10; let a=ws.filter(w=&gt;w.cx&gt;=x0&amp;&amp;w.cx&lt;x1);&#10; if(part===&quot;top&quot;)a=a.filter(w=&gt;w.cy&lt;split);&#10; if(part===&quot;bottom&quot;)a=a.filter(w=&gt;w.cy&gt;=split);&#10; return join(a);&#10;}&#10;function roomCell(ws,x0,x1,split){return join(ws.filter(w=&gt;w.x0&gt;=x0&amp;&amp;w.x0&lt;x1&amp;&amp;w.cy&lt;split))}&#10;function cleanCell(s,labels=[]){s=norm(s);for(const l of labels)s=s.replaceAll(l,&quot;&quot;);return s.replace(/円$/,&quot;&quot;)}&#10;function parsePage(items,pageNo){&#10; const anchors=items.filter(w=&gt;w.cx&gt;=25&amp;&amp;w.cx&lt;80&amp;&amp;/^(?:10|11)\d{8}$/.test(w.text)).sort((a,b)=&gt;a.top-b.top);&#10; const out=[];&#10; for(let i=0;i&lt;anchors.length;i++){&#10;  const a=anchors[i], next=anchors[i+1];&#10;  const rowTop=a.top-3;&#10;  const rowBottom=next?Math.min(next.top-2,a.top+24.8):a.top+24.8;&#10;  const rw=items.filter(w=&gt;w.cy&gt;=rowTop&amp;&amp;w.cy&lt;rowBottom);&#10;  const split=a.top+10.2;&#10;  let name=cleanCell(cell(rw,75,158,split));&#10;  let room=cleanCell(roomCell(rw,158,180,split));&#10;  let floor=cleanCell(cell(rw,158,180,split,&quot;bottom&quot;));&#10;  if(/[-‐‑‒–—―ー]$/.test(room)){&#10;    const roomTail=String(floor||&quot;&quot;).match(/^(\d{1,4})(?=\(|（)/);&#10;    if(roomTail) room+=roomTail[1];&#10;    else {&#10;      const tailAfter=String(floor||&quot;&quot;).match(/^(.*?[)）])(\d{1,4})$/);&#10;      if(tailAfter) room+=tailAfter[2];&#10;    }&#10;  }&#10;  const rent=cleanCell(cell(rw,342,417,split),[&quot;賃&quot;]);&#10;  const fee=cleanCell(cell(rw,417,474,split,&quot;top&quot;),[&quot;共&quot;]);&#10;  const guarantee=cleanCell(cell(rw,474,530,split,&quot;top&quot;),[&quot;保&quot;]);&#10;  const deposit=cleanCell(cell(rw,530,590,split,&quot;top&quot;),[&quot;敷&quot;]);&#10;  const gift=cleanCell(cell(rw,530,590,split,&quot;bottom&quot;),[&quot;礼&quot;]);&#10;  const layout=cleanCell(cell(rw,207,236,split,&quot;bottom&quot;));&#10;  const area=cleanCell(cell(rw,236,268,split,&quot;bottom&quot;));&#10;  const status=cleanCell(cell(rw,180,207,split));&#10;  out.push({page:pageNo,code:a.text,name,room,rent,fee,deposit,gift,guarantee,layout,area,status});&#10; }&#10; return out;&#10;}&#10;async function run(){&#10; clearError(); const files=[...$(&quot;pdfFile&quot;).files]; if(!files.length){showError(&quot;ARNet PDFを選択してください。&quot;);return}&#10; $(&quot;runBtn&quot;).disabled=true;$(&quot;results&quot;).style.display=&quot;none&quot;;rows=[];&#10; try{&#10;  let totalPages=0, donePages=0;&#10;  const pdfs=[];&#10;  for(const file of files){&#10;   const buf=await file.arrayBuffer();&#10;   const pdf=await pdfjsLib.getDocument({data:new Uint8Array(buf)}).promise;&#10;   pdfs.push({file,pdf});&#10;   totalPages+=pdf.numPages;&#10;  }&#10;  $(&quot;pages&quot;).textContent=totalPages;&#10;  for(let fi=0;fi&lt;pdfs.length;fi++){&#10;   const {file,pdf}=pdfs[fi];&#10;   for(let p=1;p&lt;=pdf.numPages;p++){&#10;    setProgress(Math.round(donePages/Math.max(1,totalPages)*95),`PDF解析中 ${fi+1}/${pdfs.length}：${file.name} ${p}/${pdf.numPages}ページ`);&#10;    const page=await pdf.getPage(p);&#10;    const viewport=page.getViewport({scale:1,rotation:page.rotate});&#10;    const content=await page.getTextContent();&#10;    rows.push(...parsePage(textItems(content,viewport),p));&#10;    donePages++;&#10;   }&#10;  }&#10;  $(&quot;rows&quot;).textContent=rows.length;&#10;  render();setProgress(100,`完了：${rows.length}件 / ${files.length}ファイル`);$(&quot;results&quot;).style.display=&quot;block&quot;;$(&quot;results&quot;).scrollIntoView({behavior:&quot;smooth&quot;});&#10; }catch(e){console.error(e);showError(&quot;読み取れませんでした：&quot;+(e?.message||e))}finally{$(&quot;runBtn&quot;).disabled=false}&#10;}&#10;function render(){&#10; $(&quot;body&quot;).innerHTML=rows.map(r=&gt;`&lt;tr&gt;&lt;td&gt;${r.page}&lt;/td&gt;&lt;td&gt;${esc(r.code)} &lt;/td&gt;&lt;td&gt;${esc(r.name)} &lt;/td&gt;&lt;td&gt;${esc(r.room)}&lt;/td&gt;&lt;td&gt;${esc(r.rent)}&lt;/td&gt;&lt;td&gt;${esc(r.fee)}&lt;/td&gt;&lt;td&gt;${esc(r.deposit)}&lt;/td&gt;&lt;td&gt;${esc(r.gift)}&lt;/td&gt;&lt;td&gt;${esc(r.guarantee)}&lt;/td&gt;&lt;td&gt;${esc(r.layout)}&lt;/td&gt;&lt;td&gt;${esc(r.area)}&lt;/td&gt;&lt;td&gt;${esc(r.status)}&lt;/td&gt;&lt;/tr&gt;`).join(&quot;&quot;);&#10; document.querySelectorAll(&quot;.copy&quot;).forEach(b=&gt;b.onclick=()=&gt;navigator.clipboard?.writeText(b.dataset.copy||&quot;&quot;));&#10;}&#10;$(&quot;runBtn&quot;).onclick=run;$(&quot;resetBtn&quot;).onclick=()=&gt;location.reload();&#10;$(&quot;pdfFile&quot;).onchange=e=&gt;{const fs=[...e.target.files];$(&quot;filename&quot;).textContent=fs.length?`${fs.length}ファイル：`+fs.map(f=&gt;f.name).join(&quot; / &quot;):&quot;未選択&quot;;};&#10;const drop=$(&quot;drop&quot;);[&quot;dragenter&quot;,&quot;dragover&quot;].forEach(ev=&gt;drop.addEventListener(ev,e=&gt;{e.preventDefault();drop.classList.add(&quot;drag&quot;)}));[&quot;dragleave&quot;,&quot;drop&quot;].forEach(ev=&gt;drop.addEventListener(ev,e=&gt;{e.preventDefault();drop.classList.remove(&quot;drag&quot;)}));drop.addEventListener(&quot;drop&quot;,e=&gt;{const fs=[...e.dataTransfer.files].filter(x=&gt;x.name.toLowerCase().endsWith(&quot;.pdf&quot;));if(!fs.length)return;const dt=new DataTransfer();fs.forEach(f=&gt;dt.items.add(f));$(&quot;pdfFile&quot;).files=dt.files;$(&quot;pdfFile&quot;).dispatchEvent(new Event(&quot;change&quot;));});&#10;&lt;/script&gt;&#10;&lt;/body&gt;&#10;&lt;/html&gt;&#10;"></iframe></div>
   </div>
 
   <div class="card">
-    <button onclick="compareNow()">③ 同一物件＋賃料を確認</button>
+    <button onclick="compareNow()">③ リアプロとMIOを比較</button>
     <div id="summary" style="margin-top:10px;font-size:13px;color:#666">両方を読み取ってから押してください。</div>
     <div id="debug" style="display:none;margin-top:10px;padding:10px;background:#fff8e7;border:1px solid #ead7a2;border-radius:8px;font-size:12px;white-space:pre-wrap"></div>
     <div id="filterbar" class="filterbar">
       <button id="filterAll" class="filterbtn active" onclick="filterRows('all')">すべて（0）</button>
       <button id="filterDiff" class="filterbtn diffbtn" onclick="showDiffOnly()">相違あり（0）</button>
-      <button id="filterOnly" class="filterbtn onlybtn" onclick="filterRows('itonly')">ITANDIのみ（0）</button>
+      <button id="filterOnly" class="filterbtn onlybtn" onclick="filterRows('itonly')">リアプロのみ（0）</button>
       <button id="filterMove" class="filterbtn" onclick="showMoveCheck()">期日確認（0）</button>
-      <button id="filterApplied" class="filterbtn" onclick="showAppliedMio()">申込あり＋MIO有（0）</button>
+      <button id="filterApplied" class="filterbtn" onclick="showAppliedMio()">申込有＋MIOあり（0）</button>
     </div>
     <div id="compareTableBox" class="tablebox">
       <table>
         <thead><tr>
           <th>判定</th>
-          <th>ITANDI物件名</th><th>ITANDI号室</th>
-          <th>ARNet物件名</th><th>ARNet号室</th><th>ARNet物件番号</th>
-          <th>賃料 I / A</th><th>共益費 I / A</th><th>敷金 I / A</th><th>礼金 I / A</th><th>保証金 I / A</th><th>間取り I / A</th><th>面積 I / A</th>
-          <th>ITANDI業者名</th><th>ITANDI AD</th>
+          <th>リアプロ物件名</th><th>リアプロ号室</th>
+          <th>MIO物件名</th><th>MIO号室</th><th>MIO物件番号</th>
+          <th>賃料 R / M</th><th>共益費 R / M</th><th>敷金 R / M</th><th>礼金 R / M</th><th>保証金 R / M</th><th>間取り R / M</th><th>面積 R / M</th>
+          <th>業者名（参考）</th><th>AD（参考）</th>
           <th>判定キー</th>
         </tr></thead>
         <tbody id="res"></tbody>
@@ -532,10 +71,10 @@ $(&quot;run&quot;).onclick=run;$(&quot;reset&quot;).onclick=()=&gt;location.relo
     <div id="moveCheckBox" class="tablebox" style="display:none">
       <table style="min-width:700px">
         <thead><tr>
-          <th>ITANDI物件名</th>
+          <th>リアプロ物件名</th>
           <th>号室</th>
           <th>入居時期</th>
-          <th>ARNet管理番号</th>
+          <th>MIO管理番号</th>
         </tr></thead>
         <tbody id="moveRes"></tbody>
       </table>
@@ -544,13 +83,13 @@ $(&quot;run&quot;).onclick=run;$(&quot;reset&quot;).onclick=()=&gt;location.relo
     <div id="appliedMioBox" class="tablebox" style="display:none">
       <table style="min-width:950px">
         <thead><tr>
-          <th>ITANDI物件名</th>
+          <th>リアプロ物件名</th>
           <th>号室</th>
           <th>MIO物件名</th>
           <th>MIO号室</th>
           <th>MIO管理番号</th>
-          <th>ITANDI業者名</th>
-          <th>ITANDI AD</th>
+          <th>業者名</th>
+          <th>AD</th>
         </tr></thead>
         <tbody id="appliedMioRes"></tbody>
       </table>
@@ -561,12 +100,12 @@ $(&quot;run&quot;).onclick=run;$(&quot;reset&quot;).onclick=()=&gt;location.relo
         <thead><tr>
           <th>物件名</th>
           <th>号室</th>
-          <th>ARNet物件番号</th>
+          <th>MIO物件番号</th>
           <th>相違項目</th>
           <th>ITANDI</th>
           <th>ARNet</th>
-          <th>ITANDI業者名</th>
-          <th>ITANDI AD</th>
+          <th>業者名</th>
+          <th>AD</th>
         </tr></thead>
         <tbody id="diffOnlyRes"></tbody>
       </table>
@@ -576,21 +115,35 @@ $(&quot;run&quot;).onclick=run;$(&quot;reset&quot;).onclick=()=&gt;location.relo
 
 <script>
 function esc(s){return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
-function norm(s){return String(s??"").normalize("NFKC").replace(/戶/g,"戸").replace(/[\s　・･‧.\-_（）()]/g,"").replace(/^(?:(?:要物確|物確不要|7日以上前))+/,"").toLowerCase()}
+function norm(s){return String(s??"").normalize("NFKC").replace(/[\s　・･‧.\-_（）()]/g,"").toLowerCase()}
 
 function cleanName(s){
   return String(s??"")
     .normalize("NFKC")
     .replace(/コピー/g,"")
     .replace(/\([^)]*\)/g,"")
+    // 「売布が丘 / 売布ガ丘 / 売布ヶ丘 / 売布ケ丘」などの表記揺れを比較時だけ統一
+    // 画面表示は元データのまま。matchKey生成時のみ同一扱いになる。
+    .replace(/[がガヶケ]丘/g,"ヶ丘")
+    // ジオタワー宝塚グランレジス THE NORTH の表記揺れだけ吸収。
+    // 「ジオタワー宝塚グランレジス」単体とは別物件のまま。
+    .replace(/ジオタワー宝塚\s*グランレジス\s*THE\s*(NORTH|SOUTH)/gi,(m,d)=>"ジオタワー宝塚グランレジスTHE"+d.toUpperCase())
+    // 末尾のローマ数字を算用数字へ統一（NFKC後は Ⅱ→II になる）
+    // 例：ヴィラミナミⅡ ⇔ ヴィラミナミ2 / RESIDENCEII ⇔ RESIDENCE2
+    .replace(/(?:VIII|VII|VI|IV|V|III|II|I)$/i, m => ({I:"1",II:"2",III:"3",IV:"4",V:"5",VI:"6",VII:"7",VIII:"8"}[m.toUpperCase()] || m))
     .trim();
 }
 
 function roomNo(s){
-  let x=String(s??"").normalize("NFKC").trim();
-  let nums=[...x.matchAll(/\d+/g)].map(m=>m[0]);
-  let r=nums.length?nums[nums.length-1]:x;
-  return String(r).replace(/^0+(?=\d)/,"");
+  let x=String(s??"").normalize("NFKC").trim().toUpperCase()
+    .replace(/[‐‑‒–—―ー]/g,"-")
+    .replace(/\s+/g,"");
+  // 号室なし物件は、空欄 / -- / なし 等を比較時だけ同一扱い
+  if(!x || x==="--" || x==="-" || x==="なし" || x==="無し" || x==="無") return "";
+  if(/^\d+$/.test(x)) return x.replace(/^0+(?=\d)/,"");
+  let m=x.match(/^([A-Z]+)(\d+)$/);
+  if(m) return m[1]+m[2].replace(/^0+(?=\d)/,"");
+  return x;
 }
 
 function matchKey(r){
@@ -599,7 +152,16 @@ function matchKey(r){
   let joined=name+" "+room;
   let block=(joined.match(/(\d+)号棟/)||[])[1]||"";
   let base=norm(name.replace(/\d+号棟/g,""));
-  return base+"|"+block+"|"+roomNo(room);
+  let roomKey=roomNo(room);
+
+  // ジオタワー宝塚グランレジス THE NORTH / THE SOUTH だけ、
+  // リアプロの N-3203 / S-1410 と MIOの 3203 / 1410 を同じ部屋候補としてマッチ。
+  // 表示上の号室は元のまま残し、後段で「号室相違」として判定する。
+  if(/^ジオタワー宝塚グランレジスthe(?:north|south)$/i.test(base)){
+    roomKey=roomKey.replace(/^[NS]-/i,"");
+  }
+
+  return base+"|"+block+"|"+roomKey;
 }
 
 function yen(v){
@@ -632,8 +194,42 @@ function guaranteeYen(v,rent){
   return depositYen(v,rent);
 }
 
+
+function termInfo(v){
+  let x=String(v??"").normalize("NFKC").replace(/,/g,"").trim();
+  if(!x || /^(入力なし|なし|0|0円|0ヶ月|0か月|0ケ月|0ヵ月|-|－)$/.test(x)) return {type:"zero", value:0};
+  let m=x.match(/([0-9]+(?:\.[0-9]+)?)\s*(?:ヶ月|か月|ケ月|ヵ月|月)/);
+  if(m) return {type:"month", value:parseFloat(m[1])};
+  const y=yen(x);
+  return y===null ? {type:"unknown", value:null} : {type:"yen", value:y};
+}
+
+function termDiff(v1,rent1,v2,rent2){
+  const a=termInfo(v1), b=termInfo(v2);
+  if(a.type==="unknown" || b.type==="unknown") return false;
+  if(a.type==="zero" && b.type==="zero") return false;
+  if(a.type==="month" && b.type==="month") return Math.abs(a.value-b.value)>1e-9;
+  if(a.type==="yen" && b.type==="yen") return a.value!==b.value;
+
+  const toYen=(info,rent)=>{
+    if(info.type==="zero") return 0;
+    if(info.type==="yen") return info.value;
+    if(info.type==="month"){
+      const r=yen(rent);
+      return r===null ? null : Math.round(info.value*r);
+    }
+    return null;
+  };
+  const ay=toYen(a,rent1), by=toYen(b,rent2);
+  return ay!==null && by!==null && ay!==by;
+}
+
 function normLayout(v){
-  return String(v??"").normalize("NFKC").replace(/[\s　]/g,"").toUpperCase();
+  // 比較時のみ +S 表記を MIO 側の S 挿入表記へ統一
+  // 例: 1LDK+S → 1SLDK / 2DK+S → 2SDK / 1K+S → 1SK
+  let x=String(v??"").normalize("NFKC").replace(/[\s　]/g,"").toUpperCase();
+  x=x.replace(/^(\d+)(LDK|DK|K)\+S$/, (m,n,t)=>n+"S"+t);
+  return x;
 }
 
 function areaValue(v){
@@ -643,28 +239,39 @@ function areaValue(v){
   return m ? parseFloat(m[0]) : null;
 }
 
+function isIgnoredCompany(v){
+  const s=String(v??"").normalize("NFKC").replace(/[\s　]/g,"");
+  return s.includes("レオパレスセンター");
+}
+
 function itRows(){
   const d=document.getElementById("itf").contentDocument;
   if(!d) return [];
-  const trs=[...d.querySelectorAll("tbody tr")];
+  const trs=[...d.querySelectorAll("#out tbody tr")];
   return trs.map(tr=>[...tr.cells].map(td=>td.innerText.trim()))
     .filter(a=>a.length>=16)
     .map(a=>({
-      status:a[1], name:a[2], room:a[3], company:a[4], rent:a[6], fee:a[7], deposit:a[8], gift:a[9], guarantee:a[10], layout:a[11], area:a[12], moveIn:a[14], ad:a[15]
+      name:a[2], room:a[3], state:a[4], moveIn:a[5], layout:a[6], area:a[7],
+      rent:a[8], fee:a[9], deposit:a[10], guarantee:a[11], gift:a[12],
+      company:a[13], ad:a[14], applied:/申込系/.test(a[15]||"")
     }))
-    .filter(r=>!String(r.status||"").includes("申込"));
+    .filter(r=>!isIgnoredCompany(r.company))
+    .filter(r=>!r.applied);
 }
 
 function itAppliedRows(){
   const d=document.getElementById("itf").contentDocument;
   if(!d) return [];
-  const trs=[...d.querySelectorAll("tbody tr")];
+  const trs=[...d.querySelectorAll("#out tbody tr")];
   return trs.map(tr=>[...tr.cells].map(td=>td.innerText.trim()))
     .filter(a=>a.length>=16)
     .map(a=>({
-      status:a[1], name:a[2], room:a[3], company:a[4], rent:a[6], fee:a[7], deposit:a[8], gift:a[9], guarantee:a[10], layout:a[11], area:a[12], moveIn:a[14], ad:a[15]
+      name:a[2], room:a[3], state:a[4], moveIn:a[5], layout:a[6], area:a[7],
+      rent:a[8], fee:a[9], deposit:a[10], guarantee:a[11], gift:a[12],
+      company:a[13], ad:a[14], applied:/申込系/.test(a[15]||"")
     }))
-    .filter(r=>String(r.status||"").includes("申込"));
+    .filter(r=>!isIgnoredCompany(r.company))
+    .filter(r=>r.applied);
 }
 
 function arRows(){
@@ -732,6 +339,9 @@ function showDiffOnly(){
     const a=A[hit];
 
     const checks=[
+      ["号室", i.room, a.room,
+        (roomNo(i.room)!==roomNo(a.room))],
+
       ["賃料", i.rent, a.rent,
         (yen(i.rent)!==null && yen(a.rent)!==null && yen(i.rent)!==yen(a.rent))],
 
@@ -739,13 +349,13 @@ function showDiffOnly(){
         (yen(i.fee)!==null && yen(a.fee)!==null && yen(i.fee)!==yen(a.fee))],
 
       ["敷金", i.deposit, a.deposit,
-        (()=>{const x=depositYen(i.deposit,i.rent),y=depositYen(a.deposit,a.rent);return x!==null&&y!==null&&x!==y})()],
+        termDiff(i.deposit,i.rent,a.deposit,a.rent)],
 
       ["礼金", i.gift, a.gift,
-        (()=>{const x=giftYen(i.gift,i.rent),y=giftYen(a.gift,a.rent);return x!==null&&y!==null&&x!==y})()],
+        termDiff(i.gift,i.rent,a.gift,a.rent)],
 
       ["保証金", i.guarantee, a.guarantee,
-        (()=>{const x=guaranteeYen(i.guarantee,i.rent),y=guaranteeYen(a.guarantee,a.rent);return x!==null&&y!==null&&x!==y})()],
+        termDiff(i.guarantee,i.rent,a.guarantee,a.rent)],
 
       ["間取り", i.layout, a.layout,
         (normLayout(i.layout)!=="" && normLayout(a.layout)!=="" && normLayout(i.layout)!==normLayout(a.layout))],
@@ -780,7 +390,10 @@ function showDiffOnly(){
 }
 
 function showMoveCheck(){
-  const I=itRows().slice().sort((a,b)=>{
+  const I=itRows().filter(r=>{
+    const v=String(r.moveIn||"").trim();
+    return v && !/相談/.test(v) && !/即|即時|即入居|即日/.test(v);
+  }).slice().sort((a,b)=>{
     const key=x=>{
       const v=String(x.moveIn||"").trim();
 
@@ -849,11 +462,13 @@ function showAppliedMio(){
     const a=A.find(x=>matchKey(x)===ik);
     if(!a) continue;
 
+    const roomd=(roomNo(i.room)!==roomNo(a.room));
+
     rows.push(`<tr>
       <td>${esc(cleanDisplayName(i.name))}</td>
-      <td>${esc(roomNo(i.room))}</td>
+      <td class="${roomd?"bad":""}">${esc(roomNo(i.room))}</td>
       <td>${esc(cleanDisplayName(a.name))}</td>
-      <td>${esc(roomNo(a.room))}</td>
+      <td class="${roomd?"bad":""}">${esc(roomNo(a.room))}</td>
       <td>${esc(a.code)}<button class="copy" onclick='copyText(${JSON.stringify(a.code)})'>コピー</button></td>
       <td class="ref-orange">${esc(i.company||"")}</td>
       <td class="ref-orange">${esc(i.ad||"")}</td>
@@ -861,7 +476,7 @@ function showAppliedMio(){
   }
 
   document.getElementById("appliedMioRes").innerHTML =
-    rows.length ? rows.join("") : '<tr><td colspan="7">「申込あり」かつMIOにもある物件はありません。</td></tr>';
+    rows.length ? rows.join("") : '<tr><td colspan="7">申込系かつMIOにもある物件はありません。</td></tr>';
 
   document.getElementById("compareTableBox").style.display="none";
   document.getElementById("moveCheckBox").style.display="none";
@@ -877,10 +492,10 @@ function compareNow(){
   const sampleI=I.slice(0,8).map(r=>`${r.name} / ${r.room} => ${matchKey(r)}`).join("\n");
   const sampleA=A.slice(0,8).map(r=>`${r.name} / ${r.room} => ${matchKey(r)}`).join("\n");
   document.getElementById("debug").textContent=
-    `ITANDI受取：${I.length}件\nARNet受取：${A.length}件\n\n【ITANDI先頭8件】\n${sampleI}\n\n【ARNet先頭8件】\n${sampleA}`;
+    `リアプロ受取：${I.length}件\nMIO受取：${A.length}件\n\n【リアプロ先頭8件】\n${sampleI}\n\n【MIO先頭8件】\n${sampleA}`;
 
   if(!I.length||!A.length){
-    document.getElementById("summary").textContent=`読取結果がありません。ITANDI ${I.length}件 / ARNet ${A.length}件`;
+    document.getElementById("summary").textContent=`読取結果がありません。リアプロ ${I.length}件 / MIO ${A.length}件`;
     return;
   }
 
@@ -899,7 +514,7 @@ function compareNow(){
     if(hit<0){
       only++;
       out.push(`<tr class="itonly">
-        <td><b>ITANDIのみ</b></td>
+        <td><b>リアプロのみ</b></td>
         <td>${esc(cleanDisplayName(i.name))}<button class="copy" onclick='copyText(${JSON.stringify(i.name)})'>コピー</button></td>
         <td>${esc(roomNo(i.room))}</td>
         <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
@@ -912,19 +527,12 @@ function compareNow(){
 
     used.add(hit);
     const a=A[hit];
+    const roomd=(roomNo(i.room)!==roomNo(a.room));
     const rd=(yen(i.rent)!==null && yen(a.rent)!==null && yen(i.rent)!==yen(a.rent));
     const fd=(yen(i.fee)!==null && yen(a.fee)!==null && yen(i.fee)!==yen(a.fee));
-    const idp=depositYen(i.deposit,i.rent);
-    const adp=depositYen(a.deposit,a.rent);
-    const dd=(idp!==null && adp!==null && idp!==adp);
-
-    const igf=giftYen(i.gift,i.rent);
-    const agf=giftYen(a.gift,a.rent);
-    const gd=(igf!==null && agf!==null && igf!==agf);
-
-    const ign=guaranteeYen(i.guarantee,i.rent);
-    const agn=guaranteeYen(a.guarantee,a.rent);
-    const gnd=(ign!==null && agn!==null && ign!==agn);
+    const dd=termDiff(i.deposit,i.rent,a.deposit,a.rent);
+    const gd=termDiff(i.gift,i.rent,a.gift,a.rent);
+    const gnd=termDiff(i.guarantee,i.rent,a.guarantee,a.rent);
 
     const ily=normLayout(i.layout);
     const aly=normLayout(a.layout);
@@ -934,7 +542,7 @@ function compareNow(){
     const aar=areaValue(a.area);
     const ard=(iar!==null && aar!==null && Math.abs(iar-aar)>0.001);
 
-    const hasDiff=rd||fd||dd||gd||gnd||lyd||ard;
+    const hasDiff=roomd||rd||fd||dd||gd||gnd||lyd||ard;
     if(hasDiff) diff++; else same++;
 
     out.push(`<tr class="${hasDiff?"diff":"ok"}">
@@ -957,7 +565,7 @@ function compareNow(){
     </tr>`);
   }
 
-  const rank={"相違あり":0,"ITANDIのみ":1,"一致":2};
+  const rank={"相違あり":0,"リアプロのみ":1,"一致":2};
   out.sort((x,y)=>{
     const rx=Object.entries(rank).find(([k])=>x.includes(">"+k+"<"))?.[1]??9;
     const ry=Object.entries(rank).find(([k])=>y.includes(">"+k+"<"))?.[1]??9;
@@ -966,14 +574,15 @@ function compareNow(){
 
   document.getElementById("res").innerHTML=out.join("");
   document.getElementById("summary").innerHTML=
-    `ITANDI <b>${I.length}</b>件 / ARNet <b>${A.length}</b>件 ｜ 相違 <b>${diff}</b> / ITANDIのみ <b>${only}</b> / 一致 <b>${same}</b>`;
+    `リアプロ <b>${I.length}</b>件 / MIO <b>${A.length}</b>件 ｜ 相違 <b>${diff}</b> / リアプロのみ <b>${only}</b> / 一致 <b>${same}</b>`;
 
   document.getElementById("filterAll").textContent=`すべて（${out.length}）`;
   document.getElementById("filterDiff").textContent=`相違あり（${diff}）`;
-  document.getElementById("filterOnly").textContent=`ITANDIのみ（${only}）`;
-  document.getElementById("filterMove").textContent=`期日確認（${I.length}）`;
+  document.getElementById("filterOnly").textContent=`リアプロのみ（${only}）`;
+  const moveCount=I.filter(r=>{const v=String(r.moveIn||"").trim();return v && !/相談/.test(v) && !/即|即時|即入居|即日/.test(v)}).length;
+  document.getElementById("filterMove").textContent=`期日確認（${moveCount}）`;
   const appliedCount=itAppliedRows().filter(i=>A.some(a=>matchKey(a)===matchKey(i))).length;
-  document.getElementById("filterApplied").textContent=`申込あり＋MIO有（${appliedCount}）`;
+  document.getElementById("filterApplied").textContent=`申込有＋MIOあり（${appliedCount}）`;
   document.getElementById("filterbar").style.display="flex";
   filterRows("all");
 }
