@@ -597,7 +597,7 @@ function compareNow(){
   box.querySelector('input').onchange=async e=>{
     const f=e.target.files?.[0];if(!f)return;
     try{
-      const data=JSON.parse(await f.text()), rows=(Array.isArray(data)?data:data.rows||[]).filter(isTargetRealproAddress);
+      const data=JSON.parse(await f.text()), rows=(Array.isArray(data)?data:data.rows||[]).map(normalizeRealproRow).filter(isTargetRealproAddress);
       const d=document.getElementById('itf').contentDocument;
       if(!d)throw new Error('リアプロ取込欄を初期化できません');
       const out=d.getElementById('out');
@@ -615,9 +615,10 @@ function compareNow(){
 const NISHINOMIYA_TARGET_TOWNS=new Set(["門戸東町","門戸西町","門戸荘","門戸岡田町","丸橋町","宝生ケ丘","東山台","花の峯","仁川百合野町","仁川町","仁川五ケ山町","生瀬武庫川町","生瀬東町","生瀬町","生瀬高台","名塩美山","名塩南台","名塩平成台","名塩東久保","名塩茶園町","名塩新町","名塩山荘","名塩さくら台","名塩木之元","名塩ガーデン","名塩赤坂","名塩","段上町","田近野町","松籟荘","下大市東町","下大市西町","塩瀬町生瀬","塩瀬町名塩","甲東園","清瀬台","神呪町","上甲東園","上大市","岡田山","上ケ原六番町","上ケ原四番町","上ケ原山手町","上ケ原山田町","上ケ原八番町","上ケ原二番町","上ケ原七番町","上ケ原十番町","上ケ原三番町","上ケ原五番町","上ケ原九番町","上ケ原一番町","一里山町","青葉台"]);
 const ITAMI_TARGET_TOWNS=new Set(["緑ケ丘","瑞穂町","瑞原","瑞ケ丘","松ケ丘","広畑","東野","西野","中野東","中野西","中野北","寺本","昆陽北","昆陽池","昆陽","鴻池","北野","奥畑","荻野西","荻野","大野","鋳物師","池尻","荒牧南","荒牧"]);
 function isTargetRealproAddress(r){const raw=[r.address,r.name,r.state].filter(Boolean).join(" ").normalize("NFKC");const m=raw.match(/住所：?\s*((?:宝塚市|川西市|西宮市|伊丹市)[^\s]*?)(?=\s+沿線：|$)/);const a=(m?m[1]:raw).replace(/\s/g,"");if(a.startsWith("宝塚市")||a.startsWith("川西市"))return true;if(a.startsWith("西宮市"))return [...NISHINOMIYA_TARGET_TOWNS].some(t=>a.slice(3).startsWith(t));if(a.startsWith("伊丹市"))return [...ITAMI_TARGET_TOWNS].some(t=>a.slice(3).startsWith(t));return false;}
+function normalizeRealproRow(r){const raw=String(r.state||'');if(!r.room&&raw){const m=raw.match(/(.+?)\s+(\S+号室)\s+住所：/);if(m)return {...r,name:r.name||m[1],room:m[2],state:r.moveIn||'',moveIn:r.layout||'',layout:r.rent||'',area:r.fee||'',rent:r.deposit||'',fee:r.gift||'',deposit:r.guarantee||''};}return r;}
 window.addEventListener('message',e=>{
   if(e.origin!=='https://www.realnetpro.com'||e.data?.type!=='realproRows')return;
-  const allRows=e.data.rows||[], rows=allRows.filter(isTargetRealproAddress), d=document.getElementById('itf')?.contentDocument;
+  const allRows=e.data.rows||[], rows=allRows.map(normalizeRealproRow).filter(isTargetRealproAddress), d=document.getElementById('itf')?.contentDocument;
   if(!d)return;
   const esc=s=>String(s??'').replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
   const out=d.getElementById('out');if(!out)return;
