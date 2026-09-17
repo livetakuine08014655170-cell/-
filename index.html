@@ -587,5 +587,39 @@ function compareNow(){
   filterRows("all");
 }
 </script>
+<script>
+// PDFを使わず、リアプロ取り込みJSONを既存の比較ロジックへ渡す入口
+(()=>{
+  const box=document.createElement('div');
+  box.style='position:fixed;right:16px;top:16px;z-index:20;background:#17365d;color:#fff;padding:10px;border-radius:9px;font:13px sans-serif;box-shadow:0 2px 10px #0003';
+  box.innerHTML='<b>リアプロ直接取込</b><br><small>realpro-rows.jsonを選択</small><br><input type="file" accept=".json,application/json" style="margin-top:6px">';
+  document.body.appendChild(box);
+  box.querySelector('input').onchange=async e=>{
+    const f=e.target.files?.[0];if(!f)return;
+    try{
+      const data=JSON.parse(await f.text()), rows=Array.isArray(data)?data:data.rows||[];
+      const d=document.getElementById('itf').contentDocument;
+      if(!d)throw new Error('リアプロ取込欄を初期化できません');
+      const out=d.getElementById('out');
+      out.innerHTML='<table><thead><tr><th>判定</th><th>ページ</th><th>物件名</th><th>号室</th><th>状態</th><th>入居時期</th><th>間取り</th><th>面積</th><th>賃料</th><th>共益費</th><th>敷金</th><th>保証金</th><th>礼金</th><th>業者名</th><th>AD</th><th>判定キー</th></tr></thead><tbody></tbody></table>';
+      const esc=s=>String(s??'').replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+      out.querySelector('tbody').innerHTML=rows.map(r=>`<tr><td>${esc(r.applied?'申込系':'通常')}</td><td>${esc(r.page||'')}</td><td>${esc(r.name)}</td><td>${esc(r.room)}</td><td>${esc(r.state)}</td><td>${esc(r.moveIn)}</td><td>${esc(r.layout)}</td><td>${esc(r.area)}</td><td>${esc(r.rent)}</td><td>${esc(r.fee)}</td><td>${esc(r.deposit)}</td><td>${esc(r.guarantee)}</td><td>${esc(r.gift)}</td><td>${esc(r.company)}</td><td>${esc(r.ad)}</td><td></td></tr>`).join('');
+      alert(`${rows.length}件をリアプロデータとして読み込みました。「③ リアプロとMIOを比較」を押してください。`);
+    }catch(err){alert('取込エラー：'+err.message)}
+  };
+})();
+</script>
 </body>
 </html>
+<script>
+window.addEventListener('message',e=>{
+  if(e.origin!=='https://www.realnetpro.com'||e.data?.type!=='realproRows')return;
+  const rows=e.data.rows||[], d=document.getElementById('itf')?.contentDocument;
+  if(!d)return;
+  const esc=s=>String(s??'').replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+  const out=d.getElementById('out');if(!out)return;
+  out.innerHTML='<table><tbody></tbody></table>';
+  out.querySelector('tbody').innerHTML=rows.map(r=>`<tr><td>${esc(r.applied?'申込系':'通常')}</td><td>${esc(r.page||'')}</td><td>${esc(r.name)}</td><td>${esc(r.room)}</td><td>${esc(r.state)}</td><td>${esc(r.moveIn)}</td><td>${esc(r.layout)}</td><td>${esc(r.area)}</td><td>${esc(r.rent)}</td><td>${esc(r.fee)}</td><td>${esc(r.deposit)}</td><td>${esc(r.guarantee)}</td><td>${esc(r.gift)}</td><td>${esc(r.company)}</td><td>${esc(r.ad)}</td><td></td></tr>`).join('');
+  const s=document.getElementById('summary');if(s)s.textContent=`リアプロから${rows.length}件を直接受信しました。MIO PDFを読み込んで比較してください。`;
+});
+</script>
