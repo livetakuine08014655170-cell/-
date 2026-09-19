@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>リアプロ × MIO 募集比較 v1.7</title>
+<title>リアプロ × MIO 募集比較 v1.23</title>
 <style>
 :root{--navy:#17365d;--blue:#1f4e78;--gold:#b59b53;--bg:#f4f7fb;--line:#dbe3ea;--red:#c63838;--green:#168552}
 *{box-sizing:border-box}
@@ -17,10 +17,12 @@ button{border:0;border-radius:9px;padding:11px 17px;font-weight:700;cursor:point
 .tablebox{overflow:auto;max-height:680px;border:1px solid var(--line);border-radius:10px;margin-top:12px}
 table{border-collapse:collapse;width:100%;min-width:1100px;font-size:12px}
 th{position:sticky;top:0;background:var(--navy);color:#fff;padding:8px;text-align:left}
+th.sortable{cursor:pointer;user-select:none}th.sortable:hover{background:#285784}th.sortable::after{content:" ↕";font-size:10px;color:#c9d8e8}th.sortable.asc::after{content:" ▲";color:#fff}th.sortable.desc::after{content:" ▼";color:#fff}
 td{padding:7px 8px;border-bottom:1px solid #edf1f4}
 .ok{background:#f4fbf7} .diff{background:#fff4f4} .itonly{background:#fff8e7}
 .bad{color:var(--red);font-weight:700}
 .copy{margin-left:5px;padding:3px 7px;background:#e9ecef;color:#222;border:1px solid #777;border-radius:5px;font-size:11px}
+.soft-match{margin-top:5px;padding:6px 8px;background:#fff3c9;border-left:4px solid #d59b00;border-radius:5px;font-size:12px}.soft-match button{margin-left:7px;padding:4px 8px;font-size:11px;background:#a97800}.soft-ok{margin-left:7px;color:#168552;font-weight:700}.soft-diff{margin-left:7px;color:#c63838;font-weight:700}
 @media(max-width:900px){.grid{grid-template-columns:1fr}}
 
 .filterbar{display:none;gap:8px;flex-wrap:wrap;margin:14px 0 10px}
@@ -35,6 +37,7 @@ td{padding:7px 8px;border-bottom:1px solid #edf1f4}
 .realpro-import p{margin:0 0 12px;color:#65727d;font-size:13px;line-height:1.7}
 .realpro-file{display:block;width:100%;padding:18px;border:2px dashed #aebdca;border-radius:11px;background:#fafcfe;color:#27333d}
 .realpro-status{margin-top:10px;padding:10px 12px;border-radius:8px;background:#eef4f8;color:var(--navy);font-size:13px;line-height:1.6}
+#arf{height:235px}
 </style>
 </head>
 <body>
@@ -50,22 +53,21 @@ td{padding:7px 8px;border-bottom:1px solid #edf1f4}
   </div>
 
   <div class="card">
-    <button onclick="compareNow()">③ リアプロとMIOを比較</button>
+    <button onclick="compareNow()">③ 再比較</button>
     <div id="summary" style="margin-top:10px;font-size:13px;color:#666">両方を読み取ってから押してください。</div>
     <div id="debug" style="display:none;margin-top:10px;padding:10px;background:#fff8e7;border:1px solid #ead7a2;border-radius:8px;font-size:12px;white-space:pre-wrap"></div>
     <div id="filterbar" class="filterbar">
-      <button id="filterAll" class="filterbtn active" onclick="filterRows('all')">すべて（0）</button>
-      <button id="filterDiff" class="filterbtn diffbtn" onclick="showDiffOnly()">相違あり（0）</button>
+      <button id="filterDiff" class="filterbtn diffbtn active" onclick="showDiffOnly()">相違あり（0）</button>
       <button id="filterOnly" class="filterbtn onlybtn" onclick="filterRows('itonly')">リアプロのみ（0）</button>
-      <button id="filterMove" class="filterbtn" onclick="showMoveCheck()">期日確認（0）</button>
+      <button id="filterMatch" class="filterbtn" onclick="filterRows('ok')">一致（0）</button>
       <button id="filterApplied" class="filterbtn" onclick="showAppliedMio()">申込有＋MIOあり（0）</button>
     </div>
     <div id="compareTableBox" class="tablebox">
       <table>
-        <thead><tr>
+        <thead id="compareHead"><tr>
           <th>判定</th>
           <th>リアプロ物件名</th><th>リアプロ号室</th>
-          <th>MIO物件名</th><th>MIO号室</th><th>MIO物件番号</th>
+          <th>MIO物件名<span style="font-size:10px">（リアプロのみは住所）</span></th><th>MIO号室</th><th>MIO物件番号</th>
           <th>賃料 R / M</th><th>共益費 R / M</th><th>敷金 R / M</th><th>礼金 R / M</th><th>保証金 R / M</th><th>間取り R / M</th><th>面積 R / M</th>
           <th>業者名（参考）</th><th>AD（参考）</th>
           <th>判定キー</th>
@@ -121,6 +123,21 @@ td{padding:7px 8px;border-bottom:1px solid #edf1f4}
 
 <script>
 function esc(s){return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+function sourceLabel(){return new URLSearchParams(location.search).get("source")==="itandi"?"イタンジ":"リアプロ"}
+// itandi-index.html 経由だけ表示名を切り替える。通常の index.html はリアプロのまま。
+(()=>{
+  if(sourceLabel()!=="イタンジ")return;
+  document.title="イタンジ × MIO 募集比較 v1.23";
+  const h1=document.querySelector("header h1");
+  if(h1)h1.textContent="イタンジ × MIO 募集比較";
+  const intro=document.querySelector("header h1+div");
+  if(intro)intro.textContent="イタンジの申込系を先に分離し、募集中物件をMIOと比較します。業者名・ADは比較せず参考表示。";
+  const compareButton=document.querySelector('button[onclick="compareNow()"]');
+  if(compareButton)compareButton.textContent="③ 再比較";
+  document.querySelectorAll("th").forEach(th=>{
+    th.innerHTML=th.innerHTML.replaceAll("リアプロ","イタンジ");
+  });
+})();
 function norm(s){return String(s??"").normalize("NFKC").replace(/[\s　・･‧.\-_（）()]/g,"").toLowerCase()}
 
 function cleanName(s){
@@ -128,10 +145,18 @@ function cleanName(s){
     .normalize("NFKC")
     .replace(/\s*-+\s*$/," ")
     .replace(/コピー/g,"")
+    // 【旭化成】など、媒体側の会社・ブランド付記は照合用の物件名から外す。
+    .replace(/[【［\[][^】］\]]*[】］\]]/g,"")
+    // 「（旧名称）」の併記は、PDFで閉じ括弧が欠けた場合も含めて比較キーから外す。
+    .replace(/[（(]\s*旧.*$/," ")
     .replace(/\([^)]*\)/g,"")
+    // 上ヶ原 / 上ケ原 のような小書き「ヶ」の地名表記ゆれを統一。
+    .replace(/[ヶケ]/g,"ケ")
     // 「売布が丘 / 売布ガ丘 / 売布ヶ丘 / 売布ケ丘」などの表記揺れを比較時だけ統一
     // 画面表示は元データのまま。matchKey生成時のみ同一扱いになる。
     .replace(/[がガヶケ]丘/g,"ヶ丘")
+    // 上ガ原 / 上が原 / 上ヶ原 / 上ケ原 なども「原」の直前に限って統一。
+    .replace(/[がガヶケ]原/g,"ヶ原")
     // ジオタワー宝塚グランレジス THE NORTH の表記揺れだけ吸収。
     // 「ジオタワー宝塚グランレジス」単体とは別物件のまま。
     .replace(/ジオタワー宝塚\s*グランレジス\s*THE\s*(NORTH|SOUTH)/gi,(m,d)=>"ジオタワー宝塚グランレジスTHE"+d.toUpperCase())
@@ -153,6 +178,48 @@ function roomNo(s){
   if(m) return m[1]+m[2].replace(/^0+(?=\d)/,"");
   return x;
 }
+
+function buildingCompareKey(r){
+  return norm(cleanName(r?.name||"").replace(/\d+号棟/g,""));
+}
+
+function hyphenRoomTail(room){
+  const normalized=roomNo(room);
+  const m=normalized.match(/^.+-(.+)$/);
+  return m ? roomNo(m[1]) : "";
+}
+
+// 厳密一致にしない補助候補。イタンジ側の「1-202」のような棟番号付き号室だけ対象にする。
+function findSoftRoomCandidate(sourceRow,mioRows){
+  const tail=hyphenRoomTail(sourceRow.room);
+  if(!tail)return null;
+  const key=buildingCompareKey(sourceRow);
+  const candidates=mioRows.filter(row=>buildingCompareKey(row)===key && roomNo(row.room)===tail);
+  return candidates.length===1 ? candidates[0] : null;
+}
+
+function softComparisonDiffs(i,a){
+  const diffs=[];
+  // 号室は「1-202 ⇔ 202」の補助候補として確認済みなので比較対象外。
+  if(yen(i.rent)!==null && yen(a.rent)!==null && yen(i.rent)!==yen(a.rent))diffs.push("賃料");
+  if(yen(i.fee)!==null && yen(a.fee)!==null && yen(i.fee)!==yen(a.fee))diffs.push("共益費");
+  if(termDiff(i.deposit,i.rent,a.deposit,a.rent))diffs.push("敷金");
+  if(termDiff(i.gift,i.rent,a.gift,a.rent))diffs.push("礼金");
+  if(termDiff(i.guarantee,i.rent,a.guarantee,a.rent))diffs.push("保証金");
+  if(normLayout(i.layout)!=="" && normLayout(a.layout)!=="" && normLayout(i.layout)!==normLayout(a.layout))diffs.push("間取り");
+  const ia=areaValue(i.area), ma=areaValue(a.area);
+  if(ia!==null&&ma!==null&&Math.abs(ia-ma)>0.001)diffs.push("面積");
+  return diffs;
+}
+
+window.checkSoftMatch=index=>{
+  const pair=window.__softMatchPairs?.[index];
+  const out=document.getElementById(`softMatchResult${index}`);
+  if(!pair||!out)return;
+  const diffs=softComparisonDiffs(pair.source,pair.candidate);
+  out.className=diffs.length?"soft-diff":"soft-ok";
+  out.textContent=diffs.length?`相違あり：${diffs.join("・")}`:"一致";
+};
 
 function matchKey(r){
   let name=cleanName(r.name);
@@ -238,6 +305,8 @@ function normLayout(v){
   // 比較時のみ +S 表記を MIO 側の S 挿入表記へ統一
   // 例: 1LDK+S → 1SLDK / 2DK+S → 2SDK / 1K+S → 1SK
   let x=String(v??"").normalize("NFKC").replace(/[\s　]/g,"").toUpperCase();
+  // リアプロ・MIO間では「ワンルーム / 1R / 1K」を同一扱い
+  x=x.replace(/^(ワンルーム|1R|1K)$/,"1K");
   x=x.replace(/^(\d+)(LDK|DK|K)\+S$/, (m,n,t)=>n+"S"+t);
   return x;
 }
@@ -248,6 +317,9 @@ function areaValue(v){
   const m=x.match(/-?\d+(?:\.\d+)?/);
   return m ? parseFloat(m[0]) : null;
 }
+
+// 駐車場など、面積が明示的に0㎡の行は比較対象にしない。空欄は残す。
+function isZeroArea(v){return areaValue(v)===0;}
 
 function isIgnoredCompany(v){
   const s=String(v??"").normalize("NFKC").replace(/[\s　]/g,"");
@@ -261,11 +333,12 @@ function itRows(){
   return trs.map(tr=>[...tr.cells].map(td=>td.innerText.trim()))
     .filter(a=>a.length>=16)
     .map(a=>({
-      name:a[2], room:a[3], state:a[4], moveIn:a[5], layout:a[6], area:a[7],
+      name:a[2], room:a[3], address:a[16]||"", state:a[4], moveIn:a[5], layout:a[6], area:a[7],
       rent:a[8], fee:a[9], deposit:a[10], guarantee:a[11], gift:a[12],
       company:a[13], ad:a[14], applied:/申込系/.test((a[0]||"")+" "+(a[15]||""))
     }))
     .filter(r=>!isIgnoredCompany(r.company))
+    .filter(r=>!isZeroArea(r.area))
     .filter(r=>!r.applied);
 }
 
@@ -276,11 +349,12 @@ function itAppliedRows(){
   return trs.map(tr=>[...tr.cells].map(td=>td.innerText.trim()))
     .filter(a=>a.length>=16)
     .map(a=>({
-      name:a[2], room:a[3], state:a[4], moveIn:a[5], layout:a[6], area:a[7],
+      name:a[2], room:a[3], address:a[16]||"", state:a[4], moveIn:a[5], layout:a[6], area:a[7],
       rent:a[8], fee:a[9], deposit:a[10], guarantee:a[11], gift:a[12],
       company:a[13], ad:a[14], applied:/申込系/.test((a[0]||"")+" "+(a[15]||""))
     }))
     .filter(r=>!isIgnoredCompany(r.company))
+    .filter(r=>!isZeroArea(r.area))
     .filter(r=>r.applied);
 }
 
@@ -326,26 +400,61 @@ function filterRows(mode){
     tr.style.display = show ? "" : "none";
   });
   document.querySelectorAll(".filterbtn").forEach(b=>b.classList.remove("active"));
-  const id = mode==="diff" ? "filterDiff" : mode==="itonly" ? "filterOnly" : "filterAll";
+  const id = mode==="diff" ? "filterDiff" : mode==="itonly" ? "filterOnly" : mode==="ok" ? "filterMatch" : "filterDiff";
   document.getElementById(id)?.classList.add("active");
+}
+
+function logicalCellText(tr,index){
+  let cursor=0;
+  for(const cell of tr.cells){
+    const span=cell.colSpan||1;
+    if(index>=cursor&&index<cursor+span)return cell.innerText.trim();
+    cursor+=span;
+  }
+  return "";
+}
+
+function sortValue(text){
+  const raw=String(text||"").trim();
+  const number=raw.replace(/,/g,"").match(/-?\d+(?:\.\d+)?/);
+  return number ? {kind:"number",value:Number(number[0])} : {kind:"text",value:raw.normalize("NFKC").toLocaleLowerCase("ja")};
+}
+
+function enableComparisonSort(){
+  const head=document.getElementById("compareHead");
+  const body=document.getElementById("res");
+  if(!head||!body||head.dataset.sortReady)return;
+  head.dataset.sortReady="1";
+  [...head.querySelectorAll("th")].forEach((th,index)=>{
+    th.classList.add("sortable");
+    th.addEventListener("click",()=>{
+      const direction=th.classList.contains("asc") ? -1 : 1;
+      [...head.querySelectorAll("th")].forEach(x=>x.classList.remove("asc","desc"));
+      th.classList.add(direction===1?"asc":"desc");
+      const rows=[...body.querySelectorAll("tr")];
+      rows.sort((a,b)=>{
+        const av=sortValue(logicalCellText(a,index));
+        const bv=sortValue(logicalCellText(b,index));
+        if(av.kind==="number"&&bv.kind==="number")return (av.value-bv.value)*direction;
+        return String(av.value).localeCompare(String(bv.value),"ja")*direction;
+      });
+      rows.forEach(row=>body.appendChild(row));
+    });
+  });
 }
 
 
 function showDiffOnly(){
   const I=itRows(), A=arRows();
-  const used=new Set();
   const rows=[];
 
   for(const i of I){
     const ik=matchKey(i);
     let hit=-1;
     for(let z=0;z<A.length;z++){
-      if(used.has(z)) continue;
       if(ik===matchKey(A[z])){ hit=z; break; }
     }
     if(hit<0) continue;
-
-    used.add(hit);
     const a=A[hit];
 
     const checks=[
@@ -502,32 +611,36 @@ function compareNow(){
   const sampleI=I.slice(0,8).map(r=>`${r.name} / ${r.room} => ${matchKey(r)}`).join("\n");
   const sampleA=A.slice(0,8).map(r=>`${r.name} / ${r.room} => ${matchKey(r)}`).join("\n");
   document.getElementById("debug").textContent=
-    `リアプロ受取：${I.length}件\nMIO受取：${A.length}件\n\n【リアプロ先頭8件】\n${sampleI}\n\n【MIO先頭8件】\n${sampleA}`;
+    `${sourceLabel()}受取：${I.length}件\nMIO受取：${A.length}件\n\n【${sourceLabel()}先頭8件】\n${sampleI}\n\n【MIO先頭8件】\n${sampleA}`;
 
   if(!I.length||!A.length){
-    document.getElementById("summary").textContent=`読取結果がありません。リアプロ ${I.length}件 / MIO ${A.length}件`;
+    document.getElementById("summary").textContent=`読取結果がありません。${sourceLabel()} ${I.length}件 / MIO ${A.length}件`;
     return;
   }
 
-  const used=new Set();
   const out=[];
+  const softPairs=[];
   let same=0,diff=0,only=0;
 
   for(const i of I){
     const ik=matchKey(i);
     let hit=-1;
     for(let z=0;z<A.length;z++){
-      if(used.has(z)) continue;
       if(ik===matchKey(A[z])){hit=z;break;}
     }
 
     if(hit<0){
       only++;
+      const candidate=findSoftRoomCandidate(i,A);
+      const softIndex=candidate ? softPairs.push({source:i,candidate})-1 : -1;
+      const candidateCode=String(candidate?.code||"").trim();
+      const candidateCopy=candidateCode?`<button class="copy" onclick='copyText(${JSON.stringify(candidateCode)})'>コピー</button>`:"";
+      const candidateHtml=candidate?`<div class="soft-match"><b>${sourceLabel()}のみ（要確認）</b>　MIO候補：${esc(cleanDisplayName(candidate.name))} ／ ${esc(roomNo(candidate.room))} ／ ${esc(candidateCode)}${candidateCopy}<button onclick="checkSoftMatch(${softIndex})">一致確認</button><span id="softMatchResult${softIndex}"></span></div>`:"";
       out.push(`<tr class="itonly">
-        <td><b>リアプロのみ</b></td>
+        <td><b>${sourceLabel()}のみ${candidate?"（要確認）":""}</b></td>
         <td>${esc(cleanDisplayName(i.name))}<button class="copy" onclick='copyText(${JSON.stringify(i.name)})'>コピー</button></td>
         <td>${esc(roomNo(i.room))}</td>
-        <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+        <td colspan="10">${i.address ? `住所：${esc(i.address)}` : ""}${candidateHtml}</td>
         <td class="ref-orange">${esc(i.company||"")}</td>
         <td class="ref-orange">${esc(i.ad||"")}</td>
         <td>${esc(ik)}</td>
@@ -535,7 +648,6 @@ function compareNow(){
       continue;
     }
 
-    used.add(hit);
     const a=A[hit];
     const roomd=(roomNo(i.room)!==roomNo(a.room));
     const rd=(yen(i.rent)!==null && yen(a.rent)!==null && yen(i.rent)!==yen(a.rent));
@@ -575,7 +687,7 @@ function compareNow(){
     </tr>`);
   }
 
-  const rank={"相違あり":0,"リアプロのみ":1,"一致":2};
+  const rank={"相違あり":0,[`${sourceLabel()}のみ`]:1,"一致":2};
   out.sort((x,y)=>{
     const rx=Object.entries(rank).find(([k])=>x.includes(">"+k+"<"))?.[1]??9;
     const ry=Object.entries(rank).find(([k])=>y.includes(">"+k+"<"))?.[1]??9;
@@ -583,41 +695,47 @@ function compareNow(){
   });
 
   document.getElementById("res").innerHTML=out.join("");
+  window.__softMatchPairs=softPairs;
   document.getElementById("summary").innerHTML=
-    `リアプロ <b>${I.length}</b>件 / MIO <b>${A.length}</b>件 ｜ 相違 <b>${diff}</b> / リアプロのみ <b>${only}</b> / 一致 <b>${same}</b>`;
+    `${sourceLabel()} <b>${I.length}</b>件 / MIO <b>${A.length}</b>件 ｜ 相違 <b>${diff}</b> / ${sourceLabel()}のみ <b>${only}</b> / 一致 <b>${same}</b>`;
 
-  document.getElementById("filterAll").textContent=`すべて（${out.length}）`;
   document.getElementById("filterDiff").textContent=`相違あり（${diff}）`;
-  document.getElementById("filterOnly").textContent=`リアプロのみ（${only}）`;
-  const moveCount=I.filter(r=>{const v=String(r.moveIn||"").trim();return v && !/相談/.test(v) && !/即|即時|即入居|即日/.test(v)}).length;
-  document.getElementById("filterMove").textContent=`期日確認（${moveCount}）`;
+  document.getElementById("filterOnly").textContent=`${sourceLabel()}のみ（${only}）`;
+  document.getElementById("filterMatch").textContent=`一致（${same}）`;
   const appliedCount=itAppliedRows().filter(i=>A.some(a=>matchKey(a)===matchKey(i))).length;
   document.getElementById("filterApplied").textContent=`申込有＋MIOあり（${appliedCount}）`;
   document.getElementById("filterbar").style.display="flex";
-  filterRows("all");
+  enableComparisonSort();
+  showDiffOnly();
+}
+
+function maybeAutoCompare(){
+  if(itRows().length && arRows().length)compareNow();
 }
 </script>
 <script>
-// PDFを使わず、リアプロ取り込みJSONを既存の比較ロジックへ渡す入口
+// PDFを使わず、取込JSONを既存の比較ロジックへ渡す入口
 (()=>{
+  const source=sourceLabel();
+  const fileHint=source==="イタンジ"?"itandi_YYYY-MM-DD.json":"realpro_YYYY-MM-DD.json";
   const box=document.createElement('div');
   box.className='realpro-import';
-  box.innerHTML='<h3>① リアプロJSON</h3><p>Tampermonkeyで取得した <b>realpro-rows.json</b> を選択します。対象地域とレオパレスセンター除外は自動です。</p><input class="realpro-file" type="file" accept=".json,application/json"><div id="realproImportStatus" class="realpro-status">JSON未選択</div>';
+  box.innerHTML=`<h3>① ${source}JSON</h3><p>Tampermonkeyで取得した <b>${fileHint}</b> を選択します。対象地域とレオパレスセンター除外は自動です。</p><input class="realpro-file" type="file" accept=".json,application/json"><div id="realproImportStatus" class="realpro-status">JSON未選択</div>`;
   const iframe=document.getElementById('itf'), card=iframe?.closest('.card');
   if(card){card.querySelector('h3')?.remove();iframe.style.display='none';card.insertBefore(box,iframe);}else document.body.appendChild(box);
   box.querySelector('input').onchange=async e=>{
     const f=e.target.files?.[0];if(!f)return;
     try{
-      const data=JSON.parse(await f.text()), allRows=(Array.isArray(data)?data:data.rows||[]).map(normalizeRealproRow), rows=allRows.filter(isTargetRealproAddress);
+      const data=JSON.parse(await f.text()), allRows=(Array.isArray(data)?data:data.rows||[]).map(normalizeRealproRow), rows=allRows.filter(isTargetRealproAddress).filter(r=>!isZeroArea(r.area));
       const d=document.getElementById('itf').contentDocument;
       if(!d)throw new Error('リアプロ取込欄を初期化できません');
       const out=d.getElementById('out');
-      out.innerHTML='<table><thead><tr><th>判定</th><th>ページ</th><th>物件名</th><th>号室</th><th>状態</th><th>入居時期</th><th>間取り</th><th>面積</th><th>賃料</th><th>共益費</th><th>敷金</th><th>保証金</th><th>礼金</th><th>業者名</th><th>AD</th><th>判定キー</th></tr></thead><tbody></tbody></table>';
+      out.innerHTML='<table><thead><tr><th>判定</th><th>ページ</th><th>物件名</th><th>号室</th><th>状態</th><th>入居時期</th><th>間取り</th><th>面積</th><th>賃料</th><th>共益費</th><th>敷金</th><th>保証金</th><th>礼金</th><th>業者名</th><th>AD</th><th>判定キー</th><th style="display:none">住所</th></tr></thead><tbody></tbody></table>';
       const esc=s=>String(s??'').replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
-      out.querySelector('tbody').innerHTML=rows.map(r=>`<tr><td>${esc(r.applied?'申込系':'通常')}</td><td>${esc(r.page||'')}</td><td>${esc(r.name)}</td><td>${esc(r.room)}</td><td>${esc(r.state)}</td><td>${esc(r.moveIn)}</td><td>${esc(r.layout)}</td><td>${esc(r.area)}</td><td>${esc(r.rent)}</td><td>${esc(r.fee)}</td><td>${esc(r.deposit)}</td><td>${esc(r.guarantee)}</td><td>${esc(r.gift)}</td><td>${esc(r.company)}</td><td>${esc(r.ad)}</td><td></td></tr>`).join('');
+      out.querySelector('tbody').innerHTML=rows.map(r=>`<tr><td>${esc(r.applied?'申込系':'通常')}</td><td>${esc(r.page||'')}</td><td>${esc(r.name)}</td><td>${esc(r.room)}</td><td>${esc(r.state)}</td><td>${esc(r.moveIn)}</td><td>${esc(r.layout)}</td><td>${esc(r.area)}</td><td>${esc(r.rent)}</td><td>${esc(r.fee)}</td><td>${esc(r.deposit)}</td><td>${esc(r.guarantee)}</td><td>${esc(r.gift)}</td><td>${esc(r.company)}</td><td>${esc(r.ad)}</td><td></td><td style="display:none">${esc(r.address)}</td></tr>`).join('');
       const ignored=rows.filter(r=>isIgnoredCompany(r.company)).length, applied=rows.filter(r=>r.applied&&!isIgnoredCompany(r.company)).length, normal=rows.length-ignored-applied;
       const status=document.getElementById('realproImportStatus');if(status)status.innerHTML=`取得 <b>${allRows.length}</b>件 ／ 対象地域 <b>${rows.length}</b>件 ／ レオパレス除外 <b>${ignored}</b>件 ／ 通常比較 <b>${normal}</b>件 ／ 申込系 <b>${applied}</b>件`;
-      alert(`${rows.length}件をリアプロデータとして読み込みました。「③ リアプロとMIOを比較」を押してください。`);
+      maybeAutoCompare();
     }catch(err){alert('取込エラー：'+err.message)}
   };
 })();
@@ -631,12 +749,103 @@ function isTargetRealproAddress(r){const raw=[r.address,r.name,r.state].filter(B
 function normalizeRealproRow(r){const raw=String(r.state||'');if(!r.room&&raw){const m=raw.match(/(.+?)\s+(\S+号室)\s+住所：/);if(m)return {...r,name:r.name||m[1],room:m[2],state:r.moveIn||'',moveIn:r.layout||'',layout:r.rent||'',area:r.fee||'',rent:r.deposit||'',fee:r.gift||'',deposit:r.guarantee||''};}return r;}
 window.addEventListener('message',e=>{
   if(e.origin!=='https://www.realnetpro.com'||e.data?.type!=='realproRows')return;
-  const allRows=e.data.rows||[], rows=allRows.map(normalizeRealproRow).filter(isTargetRealproAddress), d=document.getElementById('itf')?.contentDocument;
+  const allRows=e.data.rows||[], rows=allRows.map(normalizeRealproRow).filter(isTargetRealproAddress).filter(r=>!isZeroArea(r.area)), d=document.getElementById('itf')?.contentDocument;
   if(!d)return;
   const esc=s=>String(s??'').replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
   const out=d.getElementById('out');if(!out)return;
   out.innerHTML='<table><tbody></tbody></table>';
-  out.querySelector('tbody').innerHTML=rows.map(r=>`<tr><td>${esc(r.applied?'申込系':'通常')}</td><td>${esc(r.page||'')}</td><td>${esc(r.name)}</td><td>${esc(r.room)}</td><td>${esc(r.state)}</td><td>${esc(r.moveIn)}</td><td>${esc(r.layout)}</td><td>${esc(r.area)}</td><td>${esc(r.rent)}</td><td>${esc(r.fee)}</td><td>${esc(r.deposit)}</td><td>${esc(r.guarantee)}</td><td>${esc(r.gift)}</td><td>${esc(r.company)}</td><td>${esc(r.ad)}</td><td></td></tr>`).join('');
-  const s=document.getElementById('summary');if(s)s.textContent=`リアプロから${allRows.length}件を受信し、対象地域${rows.length}件を比較用に採用しました。MIO PDFを読み込んで比較してください。`;
+  out.querySelector('tbody').innerHTML=rows.map(r=>`<tr><td>${esc(r.applied?'申込系':'通常')}</td><td>${esc(r.page||'')}</td><td>${esc(r.name)}</td><td>${esc(r.room)}</td><td>${esc(r.state)}</td><td>${esc(r.moveIn)}</td><td>${esc(r.layout)}</td><td>${esc(r.area)}</td><td>${esc(r.rent)}</td><td>${esc(r.fee)}</td><td>${esc(r.deposit)}</td><td>${esc(r.guarantee)}</td><td>${esc(r.gift)}</td><td>${esc(r.company)}</td><td>${esc(r.ad)}</td><td></td><td style="display:none">${esc(r.address)}</td></tr>`).join('');
+  const s=document.getElementById('summary');if(s)s.textContent=`リアプロから${allRows.length}件を受信し、対象地域${rows.length}件を比較用に採用しました。`;
+  maybeAutoCompare();
 });
+</script>
+<script>
+// MIOは選択／ドロップ直後に読取を開始する。結果一覧は比較に不要なので隠す。
+(()=>{
+  function compactMioUploader(){
+    const frame=document.getElementById('arf');
+    const d=frame?.contentDocument;
+    const input=d?.getElementById('pdfFile');
+    const drop=d?.getElementById('drop');
+    if(!input||!drop)return;
+    // iframeの読取スクリプトが初期化された後に、完了処理だけ確実に差し込む。
+    if(d.body.dataset.compactMio==='1'){
+      const runButton=d.getElementById('runBtn');
+      const originalRun=runButton?.onclick;
+      const outerStatus=document.getElementById('mioImportStatus');
+      if(runButton&&originalRun&&!runButton.dataset.mioAutoWrap&&outerStatus){
+        runButton.dataset.mioAutoWrap='1';
+        runButton.onclick=async function(event){
+          await originalRun.call(this,event);
+          const count=d.getElementById('rows')?.textContent||'0';
+          const pages=d.getElementById('pages')?.textContent||'0';
+          outerStatus.innerHTML=`MIO PDF読取 <b>${count}</b>件 ／ ${pages}ページ`;
+          maybeAutoCompare();
+        };
+      }
+      return;
+    }
+    d.body.dataset.compactMio='1';
+
+    let outerStatus=document.getElementById('mioImportStatus');
+    if(!outerStatus){
+      outerStatus=document.createElement('div');
+      outerStatus.id='mioImportStatus';
+      outerStatus.className='realpro-status';
+      outerStatus.textContent='MIO PDF未選択';
+      frame.insertAdjacentElement('afterend',outerStatus);
+    }
+
+    d.querySelector('header')?.remove();
+    const wrap=d.querySelector('.wrap');
+    if(wrap)wrap.style.cssText='max-width:none;padding:10px 12px 14px';
+    const panel=d.querySelector('.panel');
+    if(panel)panel.style.cssText='margin:0;padding:0;border:0;box-shadow:none;background:transparent';
+    d.querySelector('.panel h2')?.remove();
+    // 自動読込でrunBtnをクリックするため、削除せず見た目だけ隠す。
+    const actions=d.querySelector('.actions');
+    if(actions)actions.style.display='none';
+    d.querySelector('.note')?.remove();
+    const results=d.getElementById('results');
+    if(results){
+      // MIOの読取処理は完了時に results を display:block に戻すため、一覧は常に隠す。
+      const hideResults=()=>{
+        if(results.style.display!=='none'||results.style.getPropertyPriority('display')!=='important'){
+          results.style.setProperty('display','none','important');
+        }
+      };
+      hideResults();
+      new MutationObserver(hideResults).observe(results,{attributes:true,attributeFilter:['style']});
+    }
+
+    const filename=d.getElementById('filename');
+    const message=d.createElement('div');
+    message.innerHTML='<b>MIO PDFをここにドラッグ（複数可）</b><br><span style="font-size:12px;color:#6b7782">または下から選択すると自動で読み込みます</span>';
+    drop.replaceChildren(message,input,filename);
+    drop.style.padding='16px';
+
+    input.addEventListener('change',()=>{
+      if(!input.files?.length)return;
+      outerStatus.textContent='MIO PDFを読み込み中…';
+      setTimeout(()=>d.getElementById('runBtn')?.click(),0);
+    });
+
+    // 子画面の読取関数の終了を直接待って、外側のステータス欄へ要約して出す。
+    const runButton=d.getElementById('runBtn');
+    const originalRun=runButton?.onclick;
+    if(runButton&&originalRun&&!runButton.dataset.mioAutoWrap){
+      runButton.dataset.mioAutoWrap='1';
+      runButton.onclick=async function(event){
+      await originalRun.call(this,event);
+      const count=d.getElementById('rows')?.textContent||'0';
+      const pages=d.getElementById('pages')?.textContent||'0';
+      outerStatus.innerHTML=`MIO PDF読取 <b>${count}</b>件 ／ ${pages}ページ`;
+      maybeAutoCompare();
+      };
+    }
+  }
+  const frame=document.getElementById('arf');
+  frame?.addEventListener('load',compactMioUploader);
+  setTimeout(compactMioUploader,0);
+})();
 </script>
