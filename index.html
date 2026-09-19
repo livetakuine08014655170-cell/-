@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>リアプロ × MIO 募集比較 v1.41</title>
+<title>リアプロ × MIO 募集比較 v1.43</title>
 <style>
 :root{--navy:#17365d;--blue:#1f4e78;--gold:#b59b53;--bg:#f4f7fb;--line:#dbe3ea;--red:#c63838;--green:#168552}
 *{box-sizing:border-box}
@@ -137,7 +137,7 @@ function selectSourceMode(mode){
 }
 (()=>{
   const isItandi=sourceLabel()==="イタンジ";
-  document.title=(isItandi?"イタンジ":"リアプロ")+" × MIO 募集比較 v1.41";
+  document.title=(isItandi?"イタンジ":"リアプロ")+" × MIO 募集比較 v1.43";
   document.body.classList.toggle("itandi-mode",isItandi);
   const h1=document.getElementById("pageTitle");
   if(h1)h1.innerHTML=isItandi?"🟧 イタンジ × MIO 募集比較<span class=\"mode-badge\">イタンジ画面</span>":"🟦 リアプロ × MIO 募集比較<span class=\"mode-badge\">リアプロ画面</span>";
@@ -203,12 +203,13 @@ function roomNo(s){
 function buildingCompareKey(r){
   return norm(cleanName(r?.name||"")
     .replace(/\d+号棟/g,"")
-    .replace(/[A-Za-zＡ-Ｚ]棟\s*$/,""));
+    .replace(/[A-Za-zＡ-Ｚ]棟\s*$/,"")
+    .replace(/\s+[A-Za-zＡ-Ｚ]\s*$/,"") );
 }
 
 function buildingLetterBlock(r){
-  const m=cleanName(r?.name||"").normalize("NFKC").toUpperCase().match(/([A-Z])棟\s*$/);
-  return m ? m[1] : "";
+  const m=cleanName(r?.name||"").normalize("NFKC").toUpperCase().match(/(?:([A-Z])棟|\s+([A-Z]))\s*$/);
+  return m ? (m[1]||m[2]) : "";
 }
 
 function prefixedRoom(room){
@@ -883,6 +884,18 @@ window.addEventListener('message',e=>{
       outerStatus.className='realpro-status';
       outerStatus.textContent='MIO PDF未選択';
       frame.insertAdjacentElement('afterend',outerStatus);
+    }
+    let checker=document.getElementById('mioReadCheck');
+    if(!checker){
+      checker=document.createElement('div');checker.id='mioReadCheck';checker.className='realpro-status';
+      checker.innerHTML='MIO読取確認：<input id="mioReadQuery" placeholder="物件名 または 号室" style="margin-left:6px;padding:5px"> <span id="mioReadResult"></span>';
+      outerStatus.insertAdjacentElement('afterend',checker);
+      const query=checker.querySelector('#mioReadQuery'), result=checker.querySelector('#mioReadResult');
+      query.addEventListener('input',()=>{
+        const q=norm(query.value);if(!q){result.textContent='';return}
+        const hits=arRows().filter(r=>norm(`${r.name} ${r.room} ${r.code}`).includes(q));
+        result.innerHTML=hits.length?` <b>${hits.length}件：</b> ${hits.slice(0,8).map(r=>`${esc(r.name)}／${esc(r.room)}（${esc(r.code)}）`).join('、')}`:' <b>該当なし</b>';
+      });
     }
 
     d.querySelector('header')?.remove();
