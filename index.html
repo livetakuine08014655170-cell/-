@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>リアプロ × MIO 募集比較 v1.24</title>
+<title>リアプロ × MIO 募集比較 v1.32</title>
 <style>
 :root{--navy:#17365d;--blue:#1f4e78;--gold:#b59b53;--bg:#f4f7fb;--line:#dbe3ea;--red:#c63838;--green:#168552}
 *{box-sizing:border-box}
@@ -124,11 +124,15 @@ td{padding:7px 8px;border-bottom:1px solid #edf1f4}
 
 <script>
 function esc(s){return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
-function sourceLabel(){return new URLSearchParams(location.search).get("source")==="itandi"?"イタンジ":"リアプロ"}
+function sourceLabel(){
+  const query=new URLSearchParams(location.search).get("source");
+  // GitHub Pagesの別リポジトリ /itandi/ に本体を置いた場合も自動判定する。
+  return query==="itandi"||/\/itandi(?:\/|$)/i.test(location.pathname)?"イタンジ":"リアプロ";
+}
 // itandi-index.html 経由だけ表示名を切り替える。通常の index.html はリアプロのまま。
 (()=>{
   if(sourceLabel()!=="イタンジ")return;
-  document.title="イタンジ × MIO 募集比較 v1.24";
+  document.title="イタンジ × MIO 募集比較 v1.32";
   document.body.classList.add("itandi-mode");
   const h1=document.querySelector("header h1");
   if(h1)h1.innerHTML="🟧 イタンジ × MIO 募集比較<span class=\"mode-badge\">イタンジ画面</span>";
@@ -152,6 +156,10 @@ function cleanName(s){
     // 「（旧名称）」の併記は、PDFで閉じ括弧が欠けた場合も含めて比較キーから外す。
     .replace(/[（(]\s*旧.*$/," ")
     .replace(/\([^)]*\)/g,"")
+    .trim()
+    // 文字コード上の異体字は比較時だけ標準字へ統一（画面表示は元のまま）。
+    .replace(/鴬/g,"鶯").replace(/髙/g,"高").replace(/﨑/g,"崎").replace(/塚/g,"塚")
+    .replace(/神/g,"神").replace(/晴/g,"晴").replace(/福/g,"福").replace(/祥/g,"祥").replace(/礼/g,"礼")
     // 一丁目 / 1丁目、棟番号などの「一」と半角数字1を照合時だけ統一。
     .replace(/一/g,"1")
     // 上ヶ原 / 上ケ原 のような小書き「ヶ」の地名表記ゆれを統一。
@@ -210,7 +218,7 @@ function softComparisonDiffs(i,a){
   if(termDiff(i.deposit,i.rent,a.deposit,a.rent))diffs.push("敷金");
   if(termDiff(i.gift,i.rent,a.gift,a.rent))diffs.push("礼金");
   if(termDiff(i.guarantee,i.rent,a.guarantee,a.rent))diffs.push("保証金");
-  if(normLayout(i.layout)!=="" && normLayout(a.layout)!=="" && normLayout(i.layout)!==normLayout(a.layout))diffs.push("間取り");
+  if(layoutIsDifferent(i.layout,a.layout))diffs.push("間取り");
   const ia=areaValue(i.area), ma=areaValue(a.area);
   if(ia!==null&&ma!==null&&Math.abs(ia-ma)>0.001)diffs.push("面積");
   return diffs;
@@ -234,13 +242,6 @@ function matchKey(r){
   let roomKey=roomNo(room);
   // 戸建てはMIO側で町名が号室欄に入ることがあるため、照合時は号室を無視する。
   if(/戸建|一戸建/.test(base)) roomKey="";
-
-  // ジオタワー宝塚グランレジス THE NORTH / THE SOUTH だけ、
-  // リアプロの N-3203 / S-1410 と MIOの 3203 / 1410 を同じ部屋候補としてマッチ。
-  // 表示上の号室は元のまま残し、後段で「号室相違」として判定する。
-  if(/^ジオタワー宝塚グランレジスthe(?:north|south)$/i.test(base)){
-    roomKey=roomKey.replace(/^[NS]-/i,"");
-  }
 
   return base+"|"+block+"|"+roomKey;
 }
@@ -313,6 +314,19 @@ function normLayout(v){
   x=x.replace(/^(ワンルーム|1R|1K)$/,"1K");
   x=x.replace(/^(\d+)(LDK|DK|K)\+S$/, (m,n,t)=>n+"S"+t);
   return x;
+}
+
+// 間取りは「MIO側が一段広い表記」の場合だけ一致扱いにする。
+// MIO: 1DK / 比較元: 1K、MIO: 1LDK / 比較元: 1DK は一致。
+// 逆向きは情報が減るため一致にしない。
+function layoutIsDifferent(sourceLayout,mioLayout){
+  const source=normLayout(sourceLayout), mio=normLayout(mioLayout);
+  if(!source || !mio) return false;
+  if(source===mio) return false;
+  const s=source.match(/^(\d+)(K|DK|LDK)$/);
+  const m=mio.match(/^(\d+)(K|DK|LDK)$/);
+  if(!s || !m || s[1]!==m[1]) return true;
+  return !((m[2]==="DK" && s[2]==="K") || (m[2]==="LDK" && s[2]==="DK"));
 }
 
 function areaValue(v){
@@ -481,7 +495,7 @@ function showDiffOnly(){
         termDiff(i.guarantee,i.rent,a.guarantee,a.rent)],
 
       ["間取り", i.layout, a.layout,
-        (normLayout(i.layout)!=="" && normLayout(a.layout)!=="" && normLayout(i.layout)!==normLayout(a.layout))],
+        layoutIsDifferent(i.layout,a.layout)],
 
       ["面積", i.area, a.area,
         (()=>{const x=areaValue(i.area),y=areaValue(a.area);return x!==null&&y!==null&&Math.abs(x-y)>0.001})()]
@@ -662,7 +676,7 @@ function compareNow(){
 
     const ily=normLayout(i.layout);
     const aly=normLayout(a.layout);
-    const lyd=(ily!=="" && aly!=="" && ily!==aly);
+    const lyd=layoutIsDifferent(i.layout,a.layout);
 
     const iar=areaValue(i.area);
     const aar=areaValue(a.area);
@@ -749,7 +763,14 @@ function maybeAutoCompare(){
 <script>
 const NISHINOMIYA_TARGET_TOWNS=new Set(["門戸東町","門戸西町","門戸荘","門戸岡田町","丸橋町","宝生ケ丘","東山台","花の峯","仁川百合野町","仁川町","仁川五ケ山町","生瀬武庫川町","生瀬東町","生瀬町","生瀬高台","名塩美山","名塩南台","名塩平成台","名塩東久保","名塩茶園町","名塩新町","名塩山荘","名塩さくら台","名塩木之元","名塩ガーデン","名塩赤坂","名塩","段上町","田近野町","松籟荘","下大市東町","下大市西町","塩瀬町生瀬","塩瀬町名塩","甲東園","清瀬台","神呪町","上甲東園","上大市","岡田山","上ケ原六番町","上ケ原四番町","上ケ原山手町","上ケ原山田町","上ケ原八番町","上ケ原二番町","上ケ原七番町","上ケ原十番町","上ケ原三番町","上ケ原五番町","上ケ原九番町","上ケ原一番町","一里山町","青葉台"]);
 const ITAMI_TARGET_TOWNS=new Set(["緑ケ丘","瑞穂町","瑞原","瑞ケ丘","松ケ丘","広畑","東野","西野","中野東","中野西","中野北","寺本","昆陽北","昆陽池","昆陽","鴻池","北野","奥畑","荻野西","荻野","大野","鋳物師","池尻","荒牧南","荒牧"]);
-function isTargetRealproAddress(r){const raw=[r.address,r.name,r.state].filter(Boolean).join(" ").normalize("NFKC");const m=raw.match(/住所：?\s*((?:宝塚市|川西市|西宮市|伊丹市)[^\s]*?)(?=\s+沿線：|$)/);const a=(m?m[1]:raw).replace(/\s/g,"");if(a.startsWith("宝塚市")||a.startsWith("川西市"))return true;if(a.startsWith("西宮市"))return [...NISHINOMIYA_TARGET_TOWNS].some(t=>a.slice(3).startsWith(t));if(a.startsWith("伊丹市"))return [...ITAMI_TARGET_TOWNS].some(t=>a.slice(3).startsWith(t));return false;}
+function townMatches(address,town){
+  if(!address.startsWith(town))return false;
+  const after=address.slice(town.length);
+  // 町名の直後は番地（数字・ハイフン）か住所の終わりだけを許可する。
+  // 例：昆陽1丁目は採用、昆陽南1丁目は除外。
+  return !after || /^[0-9０-９\-‐‑‒–—―ー]/.test(after);
+}
+function isTargetRealproAddress(r){const raw=[r.address,r.name,r.state].filter(Boolean).join(" ").normalize("NFKC");const m=raw.match(/住所：?\s*((?:宝塚市|川西市|西宮市|伊丹市)[^\s]*?)(?=\s+沿線：|$)/);const a=(m?m[1]:raw).replace(/\s/g,"");if(a.startsWith("宝塚市")||a.startsWith("川西市"))return true;if(a.startsWith("西宮市"))return [...NISHINOMIYA_TARGET_TOWNS].some(t=>townMatches(a.slice(3),t));if(a.startsWith("伊丹市"))return [...ITAMI_TARGET_TOWNS].some(t=>townMatches(a.slice(3),t));return false;}
 function normalizeRealproRow(r){const raw=String(r.state||'');if(!r.room&&raw){const m=raw.match(/(.+?)\s+(\S+号室)\s+住所：/);if(m)return {...r,name:r.name||m[1],room:m[2],state:r.moveIn||'',moveIn:r.layout||'',layout:r.rent||'',area:r.fee||'',rent:r.deposit||'',fee:r.gift||'',deposit:r.guarantee||''};}return r;}
 window.addEventListener('message',e=>{
   if(e.origin!=='https://www.realnetpro.com'||e.data?.type!=='realproRows')return;
