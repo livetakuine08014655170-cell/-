@@ -149,11 +149,13 @@ function selectSourceMode(mode){
   if(compareButton)compareButton.textContent="③ 再比較";
   if(isItandi)document.querySelectorAll("th").forEach(th=>{th.innerHTML=th.innerHTML.replaceAll("リアプロ","イタンジ")});
 })();
-function norm(s){return String(s??"").normalize("NFKC").replace(/[\s　・･‧.\-_（）()]/g,"").toLowerCase()}
+function norm(s){return String(s??"").normalize("NFKC").replace(/[\u200B-\u200D\uFEFF]/g,"").replace(/[\s　・･‧.\-_（）()]/g,"").toLowerCase()}
 
 function cleanName(s){
   return String(s??"")
     .normalize("NFKC")
+    // PDF帳票で混ざるゼロ幅文字は画面では見えないが、棟名照合を妨げるため除去する。
+    .replace(/[\u200B-\u200D\uFEFF]/g,"")
     .replace(/\s*-+\s*$/," ")
     .replace(/コピー/g,"")
     // 【旭化成】など、媒体側の会社・ブランド付記は照合用の物件名から外す。
