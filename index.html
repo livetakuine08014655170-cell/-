@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>リアプロ × MIO 募集比較 v1.38</title>
+<title>リアプロ × MIO 募集比較 v1.41</title>
 <style>
 :root{--navy:#17365d;--blue:#1f4e78;--gold:#b59b53;--bg:#f4f7fb;--line:#dbe3ea;--red:#c63838;--green:#168552}
 *{box-sizing:border-box}
@@ -23,6 +23,7 @@ td{padding:7px 8px;border-bottom:1px solid #edf1f4}
 .ok{background:#f4fbf7} .diff{background:#fff4f4} .itonly{background:#fff8e7}
 .bad{color:var(--red);font-weight:700}
 .copy{margin-left:5px;padding:3px 7px;background:#e9ecef;color:#222;border:1px solid #777;border-radius:5px;font-size:11px}
+.source-link{color:#125ca8;text-decoration:underline;font-weight:700}.source-link:hover{color:#d65215}
 .soft-match{margin-top:5px;padding:6px 8px;background:#fff3c9;border-left:4px solid #d59b00;border-radius:5px;font-size:12px}.soft-match button{margin-left:7px;padding:4px 8px;font-size:11px;background:#a97800}.soft-ok{margin-left:7px;color:#168552;font-weight:700}.soft-diff{margin-left:7px;color:#c63838;font-weight:700}
 @media(max-width:900px){.grid{grid-template-columns:1fr}}
 
@@ -136,7 +137,7 @@ function selectSourceMode(mode){
 }
 (()=>{
   const isItandi=sourceLabel()==="イタンジ";
-  document.title=(isItandi?"イタンジ":"リアプロ")+" × MIO 募集比較 v1.38";
+  document.title=(isItandi?"イタンジ":"リアプロ")+" × MIO 募集比較 v1.41";
   document.body.classList.toggle("itandi-mode",isItandi);
   const h1=document.getElementById("pageTitle");
   if(h1)h1.innerHTML=isItandi?"🟧 イタンジ × MIO 募集比較<span class=\"mode-badge\">イタンジ画面</span>":"🟦 リアプロ × MIO 募集比較<span class=\"mode-badge\">リアプロ画面</span>";
@@ -193,7 +194,7 @@ function roomNo(s){
   // 000B ⇔ B、001A ⇔ 1A のような「数字 + 英字」号室。
   // 数字部だけ先頭ゼロを除去する。
   let suffix=x.match(/^(\d+)([A-Z]+)$/);
-  if(suffix) return suffix[1].replace(/^0+(?=\d)/,"")+suffix[2];
+  if(suffix) return suffix[1].replace(/^0+/,"")+suffix[2];
   let m=x.match(/^([A-Z]+)(\d+)$/);
   if(m) return m[1]+m[2].replace(/^0+(?=\d)/,"");
   return x;
@@ -259,27 +260,32 @@ function findSoftRoomCandidate(sourceRow,mioRows){
   return candidates.length===1 ? candidates[0] : null;
 }
 
-function softComparisonDiffs(i,a){
+function softComparisonDetails(i,a){
   const diffs=[];
+  const add=(label,source,mio,isDiff)=>{if(isDiff)diffs.push({label,source,mio})};
   // 号室は「1-202 ⇔ 202」の補助候補として確認済みなので比較対象外。
-  if(yen(i.rent)!==null && yen(a.rent)!==null && yen(i.rent)!==yen(a.rent))diffs.push("賃料");
-  if(yen(i.fee)!==null && yen(a.fee)!==null && yen(i.fee)!==yen(a.fee))diffs.push("共益費");
-  if(termDiff(i.deposit,i.rent,a.deposit,a.rent))diffs.push("敷金");
-  if(termDiff(i.gift,i.rent,a.gift,a.rent))diffs.push("礼金");
-  if(termDiff(i.guarantee,i.rent,a.guarantee,a.rent))diffs.push("保証金");
-  if(layoutIsDifferent(i.layout,a.layout))diffs.push("間取り");
+  add("賃料",i.rent,a.rent,yen(i.rent)!==null && yen(a.rent)!==null && yen(i.rent)!==yen(a.rent));
+  add("共益費",i.fee,a.fee,yen(i.fee)!==null && yen(a.fee)!==null && yen(i.fee)!==yen(a.fee));
+  add("敷金",i.deposit,a.deposit,termDiff(i.deposit,i.rent,a.deposit,a.rent));
+  add("礼金",i.gift,a.gift,termDiff(i.gift,i.rent,a.gift,a.rent));
+  add("保証金",i.guarantee,a.guarantee,termDiff(i.guarantee,i.rent,a.guarantee,a.rent));
+  add("間取り",i.layout,a.layout,layoutIsDifferent(i.layout,a.layout));
   const ia=areaValue(i.area), ma=areaValue(a.area);
-  if(ia!==null&&ma!==null&&Math.abs(ia-ma)>0.001)diffs.push("面積");
+  add("面積",i.area,a.area,ia!==null&&ma!==null&&Math.abs(ia-ma)>0.001);
   return diffs;
 }
+
+function softComparisonDiffs(i,a){return softComparisonDetails(i,a).map(x=>x.label)}
 
 window.checkSoftMatch=index=>{
   const pair=window.__softMatchPairs?.[index];
   const out=document.getElementById(`softMatchResult${index}`);
   if(!pair||!out)return;
-  const diffs=softComparisonDiffs(pair.source,pair.candidate);
-  out.className=diffs.length?"soft-diff":"soft-ok";
-  out.textContent=diffs.length?`相違あり：${diffs.join("・")}`:"一致";
+  const details=softComparisonDetails(pair.source,pair.candidate);
+  out.className=details.length?"soft-diff":"soft-ok";
+  out.textContent=details.length
+    ?`相違あり：${details.map(x=>`${x.label} ${sourceLabel()}=${String(x.source||"空欄")}／MIO=${String(x.mio||"空欄")}`).join("・")}`
+    :"一致";
 };
 
 function matchKey(r){
@@ -400,7 +406,7 @@ function itRows(){
   return trs.map(tr=>[...tr.cells].map(td=>td.innerText.trim()))
     .filter(a=>a.length>=16)
     .map(a=>({
-      name:a[2], room:a[3], address:a[16]||"", state:a[4], moveIn:a[5], layout:a[6], area:a[7],
+      name:a[2], room:a[3], address:a[16]||"", url:a[17]||"", state:a[4], moveIn:a[5], layout:a[6], area:a[7],
       rent:a[8], fee:a[9], deposit:a[10], guarantee:a[11], gift:a[12],
       company:a[13], ad:a[14], applied:/申込系/.test((a[0]||"")+" "+(a[15]||""))
     }))
@@ -416,7 +422,7 @@ function itAppliedRows(){
   return trs.map(tr=>[...tr.cells].map(td=>td.innerText.trim()))
     .filter(a=>a.length>=16)
     .map(a=>({
-      name:a[2], room:a[3], address:a[16]||"", state:a[4], moveIn:a[5], layout:a[6], area:a[7],
+      name:a[2], room:a[3], address:a[16]||"", url:a[17]||"", state:a[4], moveIn:a[5], layout:a[6], area:a[7],
       rent:a[8], fee:a[9], deposit:a[10], guarantee:a[11], gift:a[12],
       company:a[13], ad:a[14], applied:/申込系/.test((a[0]||"")+" "+(a[15]||""))
     }))
@@ -453,6 +459,15 @@ function cleanDisplayName(v){
     .replace(/\([^)]*\)/g,"")
     .replace(/[ 　]+/g," ")
     .trim();
+}
+
+function sourcePropertyHtml(row){
+  const label=esc(cleanDisplayName(row?.name));
+  try{
+    const url=new URL(String(row?.url||""));
+    if(!/^https?:$/.test(url.protocol))return label;
+    return `<a class="source-link" href="${esc(url.href)}" target="_blank" rel="noopener noreferrer" title="詳細ページを開く">${label}</a>`;
+  }catch{return label}
 }
 
 function filterRows(mode){
@@ -553,7 +568,7 @@ function showDiffOnly(){
     for(const [label,iv,av,isDiff] of checks){
       if(!isDiff) continue;
       rows.push(`<tr class="diff">
-        <td>${esc(cleanDisplayName(i.name))}<button class="copy" onclick='copyText(${JSON.stringify(cleanDisplayName(i.name))})'>コピー</button></td>
+        <td>${sourcePropertyHtml(i)}<button class="copy" onclick='copyText(${JSON.stringify(cleanDisplayName(i.name))})'>コピー</button></td>
         <td>${esc(roomNo(i.room))}</td>
         <td>${esc(a.code)}<button class="copy" onclick='copyText(${JSON.stringify(a.code)})'>コピー</button></td>
         <td class="bad">${esc(label)}</td>
@@ -705,7 +720,7 @@ function compareNow(){
       const candidateHtml=candidate?`<div class="soft-match"><b>${sourceLabel()}のみ（要確認）</b>　MIO候補：${esc(cleanDisplayName(candidate.name))} ／ ${esc(roomNo(candidate.room))} ／ ${esc(candidateCode)}${candidateCopy}<button onclick="checkSoftMatch(${softIndex})">一致確認</button><span id="softMatchResult${softIndex}"></span></div>`:"";
       out.push(`<tr class="itonly">
         <td><b>${sourceLabel()}のみ${candidate?"（要確認）":""}</b></td>
-        <td>${esc(cleanDisplayName(i.name))}<button class="copy" onclick='copyText(${JSON.stringify(i.name)})'>コピー</button></td>
+        <td>${sourcePropertyHtml(i)}<button class="copy" onclick='copyText(${JSON.stringify(i.name)})'>コピー</button></td>
         <td>${esc(roomNo(i.room))}</td>
         <td colspan="10">${i.address ? `住所：${esc(i.address)}` : ""}${candidateHtml}</td>
         <td class="ref-orange">${esc(i.company||"")}</td>
@@ -736,7 +751,7 @@ function compareNow(){
 
     out.push(`<tr class="${hasDiff?"diff":"ok"}">
       <td><b>${hasDiff?"相違あり":"一致"}</b></td>
-      <td>${esc(cleanDisplayName(i.name))}<button class="copy" onclick='copyText(${JSON.stringify(i.name)})'>コピー</button></td>
+      <td>${hasDiff?sourcePropertyHtml(i):esc(cleanDisplayName(i.name))}<button class="copy" onclick='copyText(${JSON.stringify(i.name)})'>コピー</button></td>
       <td>${esc(roomNo(i.room))}</td>
       <td>${esc(cleanDisplayName(a.name))}<button class="copy" onclick='copyText(${JSON.stringify(a.name)})'>コピー</button></td>
       <td>${esc(roomNo(a.room))}</td>
@@ -797,9 +812,9 @@ function maybeAutoCompare(){
       const d=document.getElementById('itf').contentDocument;
       if(!d)throw new Error('リアプロ取込欄を初期化できません');
       const out=d.getElementById('out');
-      out.innerHTML='<table><thead><tr><th>判定</th><th>ページ</th><th>物件名</th><th>号室</th><th>状態</th><th>入居時期</th><th>間取り</th><th>面積</th><th>賃料</th><th>共益費</th><th>敷金</th><th>保証金</th><th>礼金</th><th>業者名</th><th>AD</th><th>判定キー</th><th style="display:none">住所</th></tr></thead><tbody></tbody></table>';
+      out.innerHTML='<table><thead><tr><th>判定</th><th>ページ</th><th>物件名</th><th>号室</th><th>状態</th><th>入居時期</th><th>間取り</th><th>面積</th><th>賃料</th><th>共益費</th><th>敷金</th><th>保証金</th><th>礼金</th><th>業者名</th><th>AD</th><th>判定キー</th><th style="display:none">住所</th><th style="display:none">URL</th></tr></thead><tbody></tbody></table>';
       const esc=s=>String(s??'').replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
-      out.querySelector('tbody').innerHTML=rows.map(r=>`<tr><td>${esc(r.applied?'申込系':'通常')}</td><td>${esc(r.page||'')}</td><td>${esc(r.name)}</td><td>${esc(r.room)}</td><td>${esc(r.state)}</td><td>${esc(r.moveIn)}</td><td>${esc(r.layout)}</td><td>${esc(r.area)}</td><td>${esc(r.rent)}</td><td>${esc(r.fee)}</td><td>${esc(r.deposit)}</td><td>${esc(r.guarantee)}</td><td>${esc(r.gift)}</td><td>${esc(r.company)}</td><td>${esc(r.ad)}</td><td></td><td style="display:none">${esc(r.address)}</td></tr>`).join('');
+      out.querySelector('tbody').innerHTML=rows.map(r=>`<tr><td>${esc(r.applied?'申込系':'通常')}</td><td>${esc(r.page||'')}</td><td>${esc(r.name)}</td><td>${esc(r.room)}</td><td>${esc(r.state)}</td><td>${esc(r.moveIn)}</td><td>${esc(r.layout)}</td><td>${esc(r.area)}</td><td>${esc(r.rent)}</td><td>${esc(r.fee)}</td><td>${esc(r.deposit)}</td><td>${esc(r.guarantee)}</td><td>${esc(r.gift)}</td><td>${esc(r.company)}</td><td>${esc(r.ad)}</td><td></td><td style="display:none">${esc(r.address)}</td><td style="display:none">${esc(r.url)}</td></tr>`).join('');
       const ignored=rows.filter(r=>isIgnoredCompany(r.company)).length, applied=rows.filter(r=>r.applied&&!isIgnoredCompany(r.company)).length, normal=rows.length-ignored-applied;
       const status=document.getElementById('realproImportStatus');if(status)status.innerHTML=`取得 <b>${allRows.length}</b>件 ／ 対象地域 <b>${rows.length}</b>件 ／ レオパレス除外 <b>${ignored}</b>件 ／ 通常比較 <b>${normal}</b>件 ／ 申込系 <b>${applied}</b>件`;
       maybeAutoCompare();
