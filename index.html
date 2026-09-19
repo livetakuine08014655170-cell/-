@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>リアプロ × MIO 募集比較 v1.32</title>
+<title>リアプロ × MIO 募集比較 v1.34</title>
 <style>
 :root{--navy:#17365d;--blue:#1f4e78;--gold:#b59b53;--bg:#f4f7fb;--line:#dbe3ea;--red:#c63838;--green:#168552}
 *{box-sizing:border-box}
@@ -132,7 +132,7 @@ function sourceLabel(){
 // itandi-index.html 経由だけ表示名を切り替える。通常の index.html はリアプロのまま。
 (()=>{
   if(sourceLabel()!=="イタンジ")return;
-  document.title="イタンジ × MIO 募集比較 v1.32";
+  document.title="イタンジ × MIO 募集比較 v1.34";
   document.body.classList.add("itandi-mode");
   const h1=document.querySelector("header h1");
   if(h1)h1.innerHTML="🟧 イタンジ × MIO 募集比較<span class=\"mode-badge\">イタンジ画面</span>";
@@ -180,12 +180,16 @@ function cleanName(s){
 
 function roomNo(s){
   let x=String(s??"").normalize("NFKC").trim().toUpperCase()
-    .replace(/号室$/g,"")
+    .replace(/(?:号室)+$/g,"")
     .replace(/[‐‑‒–—―ー]/g,"-")
     .replace(/\s+/g,"");
   // 号室なし物件は、空欄 / -- / なし 等を比較時だけ同一扱い
   if(!x || x==="--" || x==="-" || x==="なし" || x==="無し" || x==="無") return "";
   if(/^\d+$/.test(x)) return x.replace(/^0+(?=\d)/,"");
+  // 000B ⇔ B、001A ⇔ 1A のような「数字 + 英字」号室。
+  // 数字部だけ先頭ゼロを除去する。
+  let suffix=x.match(/^(\d+)([A-Z]+)$/);
+  if(suffix) return suffix[1].replace(/^0+(?=\d)/,"")+suffix[2];
   let m=x.match(/^([A-Z]+)(\d+)$/);
   if(m) return m[1]+m[2].replace(/^0+(?=\d)/,"");
   return x;
