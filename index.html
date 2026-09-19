@@ -3,13 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>リアプロ × MIO 募集比較 v1.34</title>
+<title>リアプロ × MIO 募集比較 v1.36</title>
 <style>
 :root{--navy:#17365d;--blue:#1f4e78;--gold:#b59b53;--bg:#f4f7fb;--line:#dbe3ea;--red:#c63838;--green:#168552}
 *{box-sizing:border-box}
 body{margin:0;font-family:"Yu Gothic","Meiryo",sans-serif;background:var(--bg);color:#27333d}
 header{background:linear-gradient(135deg,var(--navy),var(--blue));color:#fff;border-bottom:4px solid var(--gold);padding:20px}
-body.itandi-mode{--navy:#4b352b;--blue:#d96225;--gold:#f09a3e}body.itandi-mode header{border-bottom-color:#ffd08a}body.itandi-mode .card{border-top:4px solid #f3b36b}.mode-badge{display:inline-block;margin-left:8px;padding:3px 8px;border-radius:999px;background:#eef4fb;color:#17365d;font-size:12px;vertical-align:middle}.itandi-mode .mode-badge{background:#fff0df;color:#a94612}
+body.itandi-mode{--navy:#4b352b;--blue:#d96225;--gold:#f09a3e}body.itandi-mode header{border-bottom-color:#ffd08a}body.itandi-mode .card{border-top:4px solid #f3b36b}.mode-badge{display:inline-block;margin-left:8px;padding:3px 8px;border-radius:999px;background:#eef4fb;color:#17365d;font-size:12px;vertical-align:middle}.itandi-mode .mode-badge{background:#fff0df;color:#a94612}.mode-switch{display:flex;gap:7px;align-items:center;margin-top:12px;font-size:12px}.mode-switch button{padding:6px 11px;background:#fff;color:#17365d;border:1px solid #cbd7e2}.mode-switch button.active{background:var(--gold);color:#fff;border-color:var(--gold)}
 .wrap{max-width:1500px;margin:auto;padding:18px}
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 .card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:14px}
@@ -42,8 +42,8 @@ td{padding:7px 8px;border-bottom:1px solid #edf1f4}
 </style>
 </head>
 <body>
-<header><div class="wrap" style="padding:0"><h1 style="margin:0;font-size:24px">🟦 リアプロ × MIO 募集比較<span class="mode-badge">リアプロ画面</span></h1>
-<div style="font-size:13px;color:#e8eef5;margin-top:5px">リアプロの申込系を先に分離し、募集中物件をMIOと比較します。業者名・ADは比較せず参考表示。</div></div></header>
+<header><div class="wrap" style="padding:0"><h1 id="pageTitle" style="margin:0;font-size:24px">🟦 リアプロ × MIO 募集比較<span class="mode-badge">リアプロ画面</span></h1>
+<div id="pageIntro" style="font-size:13px;color:#e8eef5;margin-top:5px">リアプロの申込系を先に分離し、募集中物件をMIOと比較します。業者名・ADは比較せず参考表示。</div><div class="mode-switch"><span>比較元：</span><button id="modeRealpro" type="button" onclick="selectSourceMode('realpro')">リアプロ</button><button id="modeItandi" type="button" onclick="selectSourceMode('itandi')">イタンジ</button></div></div></header>
 <div class="wrap">
   <div class="grid">
     <div class="card"><h3>① リアプロ PDF</h3><iframe id="itf" srcdoc="&lt;!DOCTYPE html&gt;&#10;&lt;html lang=&quot;ja&quot;&gt;&#10;&lt;head&gt;&#10;&lt;meta charset=&quot;UTF-8&quot;&gt;&#10;&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,initial-scale=1&quot;&gt;&#10;&lt;title&gt;リアプロPDF 読取・申込判定&lt;/title&gt;&#10;&lt;script src=&quot;https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js&quot;&gt;&lt;/script&gt;&#10;&lt;style&gt;&#10;body{font-family:sans-serif;max-width:1120px;margin:30px auto;padding:18px}&#10;#drop{border:3px dashed #888;border-radius:12px;padding:42px 20px;text-align:center;font-size:20px;cursor:pointer}&#10;#drop.drag{background:#eee}&#10;#status{margin:18px 0;padding:14px;background:#f5f5f5;border-radius:8px;line-height:1.7}&#10;table{width:100%;border-collapse:collapse;margin-top:16px}&#10;th,td{border:1px solid #ccc;padding:8px;text-align:left}&#10;th{background:#eee;position:sticky;top:0}&#10;.bad{background:#fff3f3}&#10;input{display:none}&#10;.small{font-size:13px;color:#555;line-height:1.6}&#10;&lt;/style&gt;&#10;&lt;/head&gt;&#10;&lt;body&gt;&#10;&#10;&lt;h2&gt;リアプロPDF 読取・申込判定&lt;/h2&gt;&#10;&lt;div class=&quot;small&quot;&gt;&#10;比較用の固定項目を読取。オレンジの商談中・審査中等は「申込系」として別判定します。青い内装中等は通常募集として扱います。&#10;&lt;/div&gt;&#10;&#10;&lt;div id=&quot;drop&quot;&gt;リアプロPDFをここにドラッグ（複数可）&lt;br&gt;&lt;br&gt;またはクリック&lt;/div&gt;&#10;&lt;input id=&quot;file&quot; type=&quot;file&quot; accept=&quot;application/pdf&quot; multiple&gt;&#10;&#10;&lt;div id=&quot;status&quot;&gt;PDF待機中&lt;/div&gt;&#10;&lt;div id=&quot;out&quot;&gt;&lt;/div&gt;&#10;&#10;&lt;script&gt;&#10;pdfjsLib.GlobalWorkerOptions.workerSrc =&#10;  &quot;https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.worker.min.js&quot;;&#10;&#10;const drop=document.getElementById(&quot;drop&quot;);&#10;const file=document.getElementById(&quot;file&quot;);&#10;const status=document.getElementById(&quot;status&quot;);&#10;const out=document.getElementById(&quot;out&quot;);&#10;&#10;drop.onclick=()=&gt;file.click();&#10;file.onchange=()=&gt;file.files.length&amp;&amp;readPdfs([...file.files]);&#10;&#10;drop.addEventListener(&quot;dragover&quot;,e=&gt;{&#10;  e.preventDefault();&#10;  drop.classList.add(&quot;drag&quot;);&#10;});&#10;drop.addEventListener(&quot;dragleave&quot;,()=&gt;drop.classList.remove(&quot;drag&quot;));&#10;drop.addEventListener(&quot;drop&quot;,e=&gt;{&#10;  e.preventDefault();&#10;  drop.classList.remove(&quot;drag&quot;);&#10;  const fs=[...e.dataTransfer.files].filter(f=&gt;f.type===&quot;application/pdf&quot; || f.name.toLowerCase().endsWith(&quot;.pdf&quot;));&#10;  if(fs.length) readPdfs(fs);&#10;});&#10;&#10;function norm(s){&#10;  return String(s||&quot;&quot;)&#10;    .normalize(&quot;NFKC&quot;)&#10;    .replace(/\u00a0/g,&quot; &quot;)&#10;    .replace(/\s+/g,&quot; &quot;)&#10;    .trim();&#10;}&#10;&#10;function esc(s){&#10;  return String(s)&#10;    .replace(/&amp;/g,&quot;&amp;amp;&quot;)&#10;    .replace(/&lt;/g,&quot;&amp;lt;&quot;)&#10;    .replace(/&gt;/g,&quot;&amp;gt;&quot;);&#10;}&#10;&#10;function compact(s){&#10;  return String(s||&quot;&quot;).replace(/\s+/g,&quot;&quot;);&#10;}&#10;&#10;function hasTelWindow(items,i){&#10;  const w=items.slice(i,Math.min(items.length,i+6)).join(&quot;&quot;);&#10;  return /TEL[:：]/i.test(w) &amp;&amp; /FAX[:：]/i.test(w);&#10;}&#10;&#10;function isPropertyAddress(s){&#10;  const t=compact(s);&#10;  // 物件住所は「市 + 番地数字」を必須にする。&#10;  // 駅・徒歩表記が無い物件（例：ボナミ田中）も正しく拾う。&#10;  // 「宝塚市3丁目戸建て」のような建物名を住所と誤認しない。
@@ -126,23 +126,27 @@ td{padding:7px 8px;border-bottom:1px solid #edf1f4}
 function esc(s){return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
 function sourceLabel(){
   const query=new URLSearchParams(location.search).get("source");
-  // GitHub Pagesの別リポジトリ /itandi/ に本体を置いた場合も自動判定する。
-  return query==="itandi"||/\/itandi(?:\/|$)/i.test(location.pathname)?"イタンジ":"リアプロ";
+  if(query==="itandi"||query==="realpro")return query==="itandi"?"イタンジ":"リアプロ";
+  return localStorage.getItem("mioComparisonSource")==="itandi"?"イタンジ":"リアプロ";
 }
-// itandi-index.html 経由だけ表示名を切り替える。通常の index.html はリアプロのまま。
+function selectSourceMode(mode){
+  localStorage.setItem("mioComparisonSource",mode);
+  const url=new URL(location.href);url.searchParams.delete("source");
+  location.href=url.href;
+}
 (()=>{
-  if(sourceLabel()!=="イタンジ")return;
-  document.title="イタンジ × MIO 募集比較 v1.34";
-  document.body.classList.add("itandi-mode");
-  const h1=document.querySelector("header h1");
-  if(h1)h1.innerHTML="🟧 イタンジ × MIO 募集比較<span class=\"mode-badge\">イタンジ画面</span>";
-  const intro=document.querySelector("header h1+div");
-  if(intro)intro.textContent="イタンジの申込系を先に分離し、募集中物件をMIOと比較します。業者名・ADは比較せず参考表示。";
+  const isItandi=sourceLabel()==="イタンジ";
+  document.title=(isItandi?"イタンジ":"リアプロ")+" × MIO 募集比較 v1.36";
+  document.body.classList.toggle("itandi-mode",isItandi);
+  const h1=document.getElementById("pageTitle");
+  if(h1)h1.innerHTML=isItandi?"🟧 イタンジ × MIO 募集比較<span class=\"mode-badge\">イタンジ画面</span>":"🟦 リアプロ × MIO 募集比較<span class=\"mode-badge\">リアプロ画面</span>";
+  const intro=document.getElementById("pageIntro");
+  if(intro)intro.textContent=(isItandi?"イタンジ":"リアプロ")+"の申込系を先に分離し、募集中物件をMIOと比較します。業者名・ADは比較せず参考表示。";
+  document.getElementById("modeRealpro")?.classList.toggle("active",!isItandi);
+  document.getElementById("modeItandi")?.classList.toggle("active",isItandi);
   const compareButton=document.querySelector('button[onclick="compareNow()"]');
   if(compareButton)compareButton.textContent="③ 再比較";
-  document.querySelectorAll("th").forEach(th=>{
-    th.innerHTML=th.innerHTML.replaceAll("リアプロ","イタンジ");
-  });
+  if(isItandi)document.querySelectorAll("th").forEach(th=>{th.innerHTML=th.innerHTML.replaceAll("リアプロ","イタンジ")});
 })();
 function norm(s){return String(s??"").normalize("NFKC").replace(/[\s　・･‧.\-_（）()]/g,"").toLowerCase()}
 
@@ -196,7 +200,34 @@ function roomNo(s){
 }
 
 function buildingCompareKey(r){
-  return norm(cleanName(r?.name||"").replace(/\d+号棟/g,""));
+  return norm(cleanName(r?.name||"")
+    .replace(/\d+号棟/g,"")
+    .replace(/[A-Za-zＡ-Ｚ]棟\s*$/,""));
+}
+
+function buildingLetterBlock(r){
+  const m=cleanName(r?.name||"").normalize("NFKC").toUpperCase().match(/([A-Z])棟\s*$/);
+  return m ? m[1] : "";
+}
+
+function prefixedRoom(room){
+  const m=roomNo(room).match(/^([A-Z])-(\d+)$/);
+  return m ? {block:m[1], room:m[2]} : null;
+}
+
+// 「マンションA棟 / 101号室」⇔「マンション / A-101」の補助候補。
+// 厳密一致にはせず、候補が一意のときだけ要確認として表示する。
+function isLetterBlockRoomCandidate(left,right){
+  const leftBlock=buildingLetterBlock(left), rightBlock=buildingLetterBlock(right);
+  const leftRoom=roomNo(left.room), rightRoom=roomNo(right.room);
+  const leftPrefixed=prefixedRoom(left.room), rightPrefixed=prefixedRoom(right.room);
+  return !!(
+    leftBlock && /^\d+$/.test(leftRoom) && rightPrefixed &&
+    leftBlock===rightPrefixed.block && leftRoom===rightPrefixed.room
+  ) || !!(
+    rightBlock && /^\d+$/.test(rightRoom) && leftPrefixed &&
+    rightBlock===leftPrefixed.block && rightRoom===leftPrefixed.room
+  );
 }
 
 function hyphenRoomTail(room){
@@ -208,9 +239,10 @@ function hyphenRoomTail(room){
 // 厳密一致にしない補助候補。イタンジ側の「1-202」のような棟番号付き号室だけ対象にする。
 function findSoftRoomCandidate(sourceRow,mioRows){
   const tail=hyphenRoomTail(sourceRow.room);
-  if(!tail)return null;
   const key=buildingCompareKey(sourceRow);
-  const candidates=mioRows.filter(row=>buildingCompareKey(row)===key && roomNo(row.room)===tail);
+  const candidates=mioRows.filter(row=>buildingCompareKey(row)===key && (
+    (tail && roomNo(row.room)===tail) || isLetterBlockRoomCandidate(sourceRow,row)
+  ));
   return candidates.length===1 ? candidates[0] : null;
 }
 
