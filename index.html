@@ -3,12 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>リアプロ × MIO 募集比較 v1.23</title>
+<title>リアプロ × MIO 募集比較 v1.24</title>
 <style>
 :root{--navy:#17365d;--blue:#1f4e78;--gold:#b59b53;--bg:#f4f7fb;--line:#dbe3ea;--red:#c63838;--green:#168552}
 *{box-sizing:border-box}
 body{margin:0;font-family:"Yu Gothic","Meiryo",sans-serif;background:var(--bg);color:#27333d}
 header{background:linear-gradient(135deg,var(--navy),var(--blue));color:#fff;border-bottom:4px solid var(--gold);padding:20px}
+body.itandi-mode{--navy:#4b352b;--blue:#d96225;--gold:#f09a3e}body.itandi-mode header{border-bottom-color:#ffd08a}body.itandi-mode .card{border-top:4px solid #f3b36b}.mode-badge{display:inline-block;margin-left:8px;padding:3px 8px;border-radius:999px;background:#eef4fb;color:#17365d;font-size:12px;vertical-align:middle}.itandi-mode .mode-badge{background:#fff0df;color:#a94612}
 .wrap{max-width:1500px;margin:auto;padding:18px}
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 .card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:14px}
@@ -41,7 +42,7 @@ td{padding:7px 8px;border-bottom:1px solid #edf1f4}
 </style>
 </head>
 <body>
-<header><div class="wrap" style="padding:0"><h1 style="margin:0;font-size:24px">リアプロ × MIO 募集比較</h1>
+<header><div class="wrap" style="padding:0"><h1 style="margin:0;font-size:24px">🟦 リアプロ × MIO 募集比較<span class="mode-badge">リアプロ画面</span></h1>
 <div style="font-size:13px;color:#e8eef5;margin-top:5px">リアプロの申込系を先に分離し、募集中物件をMIOと比較します。業者名・ADは比較せず参考表示。</div></div></header>
 <div class="wrap">
   <div class="grid">
@@ -127,9 +128,10 @@ function sourceLabel(){return new URLSearchParams(location.search).get("source")
 // itandi-index.html 経由だけ表示名を切り替える。通常の index.html はリアプロのまま。
 (()=>{
   if(sourceLabel()!=="イタンジ")return;
-  document.title="イタンジ × MIO 募集比較 v1.23";
+  document.title="イタンジ × MIO 募集比較 v1.24";
+  document.body.classList.add("itandi-mode");
   const h1=document.querySelector("header h1");
-  if(h1)h1.textContent="イタンジ × MIO 募集比較";
+  if(h1)h1.innerHTML="🟧 イタンジ × MIO 募集比較<span class=\"mode-badge\">イタンジ画面</span>";
   const intro=document.querySelector("header h1+div");
   if(intro)intro.textContent="イタンジの申込系を先に分離し、募集中物件をMIOと比較します。業者名・ADは比較せず参考表示。";
   const compareButton=document.querySelector('button[onclick="compareNow()"]');
@@ -150,6 +152,8 @@ function cleanName(s){
     // 「（旧名称）」の併記は、PDFで閉じ括弧が欠けた場合も含めて比較キーから外す。
     .replace(/[（(]\s*旧.*$/," ")
     .replace(/\([^)]*\)/g,"")
+    // 一丁目 / 1丁目、棟番号などの「一」と半角数字1を照合時だけ統一。
+    .replace(/一/g,"1")
     // 上ヶ原 / 上ケ原 のような小書き「ヶ」の地名表記ゆれを統一。
     .replace(/[ヶケ]/g,"ケ")
     // 「売布が丘 / 売布ガ丘 / 売布ヶ丘 / 売布ケ丘」などの表記揺れを比較時だけ統一
