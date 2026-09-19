@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>リアプロ × MIO 募集比較 v1.43</title>
+<title>リアプロ × MIO 募集比較 v1.45</title>
 <style>
 :root{--navy:#17365d;--blue:#1f4e78;--gold:#b59b53;--bg:#f4f7fb;--line:#dbe3ea;--red:#c63838;--green:#168552}
 *{box-sizing:border-box}
@@ -137,7 +137,7 @@ function selectSourceMode(mode){
 }
 (()=>{
   const isItandi=sourceLabel()==="イタンジ";
-  document.title=(isItandi?"イタンジ":"リアプロ")+" × MIO 募集比較 v1.43";
+  document.title=(isItandi?"イタンジ":"リアプロ")+" × MIO 募集比較 v1.45";
   document.body.classList.toggle("itandi-mode",isItandi);
   const h1=document.getElementById("pageTitle");
   if(h1)h1.innerHTML=isItandi?"🟧 イタンジ × MIO 募集比較<span class=\"mode-badge\">イタンジ画面</span>":"🟦 リアプロ × MIO 募集比較<span class=\"mode-badge\">リアプロ画面</span>";
@@ -179,7 +179,7 @@ function cleanName(s){
     .replace(/ジオタワー宝塚\s*グランレジス\s*THE\s*(NORTH|SOUTH)/gi,(m,d)=>"ジオタワー宝塚グランレジスTHE"+d.toUpperCase())
     // 末尾のローマ数字を算用数字へ統一（NFKC後は Ⅱ→II になる）
     // 例：ヴィラミナミⅡ ⇔ ヴィラミナミ2 / RESIDENCEII ⇔ RESIDENCE2
-    .replace(/(?:VIII|VII|VI|IV|V|III|II|I)$/i, m => ({I:"1",II:"2",III:"3",IV:"4",V:"5",VI:"6",VII:"7",VIII:"8"}[m.toUpperCase()] || m))
+    .replace(/(?:IX|VIII|VII|VI|IV|V|III|II|I)$/i, m => ({I:"1",II:"2",III:"3",IV:"4",V:"5",VI:"6",VII:"7",VIII:"8",IX:"9"}[m.toUpperCase()] || m))
     .trim();
 }
 
@@ -300,6 +300,14 @@ function matchKey(r){
   if(/戸建|一戸建/.test(base)) roomKey="";
 
   return base+"|"+block+"|"+roomKey;
+}
+
+// 表示上の物件名と号室が同一なら、媒体固有の不可視文字などで
+// 照合キーがずれた場合も一致として扱う。
+function sameListing(left,right){
+  if(matchKey(left)===matchKey(right))return true;
+  return norm(cleanDisplayName(left?.name))===norm(cleanDisplayName(right?.name)) &&
+    roomNo(left?.room)===roomNo(right?.room);
 }
 
 function yen(v){
@@ -535,7 +543,7 @@ function showDiffOnly(){
     const ik=matchKey(i);
     let hit=-1;
     for(let z=0;z<A.length;z++){
-      if(ik===matchKey(A[z])){ hit=z; break; }
+      if(sameListing(i,A[z])){ hit=z; break; }
     }
     if(hit<0) continue;
     const a=A[hit];
@@ -709,7 +717,7 @@ function compareNow(){
     const ik=matchKey(i);
     let hit=-1;
     for(let z=0;z<A.length;z++){
-      if(ik===matchKey(A[z])){hit=z;break;}
+      if(sameListing(i,A[z])){hit=z;break;}
     }
 
     if(hit<0){
