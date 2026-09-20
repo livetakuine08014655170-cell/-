@@ -149,7 +149,12 @@ function selectSourceMode(mode){
   if(compareButton)compareButton.textContent="③ 再比較";
   if(isItandi)document.querySelectorAll("th").forEach(th=>{th.innerHTML=th.innerHTML.replaceAll("リアプロ","イタンジ")});
 })();
-function norm(s){return String(s??"").normalize("NFKC").replace(/[\s　・･‧.\-_（）()]/g,"").toLowerCase()}
+function norm(s){
+  const ordinal={一:"1",二:"2",三:"3",四:"4",五:"5",六:"6",七:"7",八:"8",九:"9",十:"10"};
+  return String(s??"").normalize("NFKC")
+    .replace(/第([一二三四五六七八九十])/g,(_,n)=>`第${ordinal[n]}`)
+    .replace(/[\s　・･‧.\-_（）()]/g,"").toLowerCase();
+}
 
 function cleanName(s){
   return String(s??"")
