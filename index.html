@@ -4,7 +4,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>リアプロ × MIO 募集比較 v1.54</title>
+<title>リアプロ × MIO 募集比較 v1.56</title>
 <style>
 :root{--navy:#17365d;--blue:#1f4e78;--gold:#b59b53;--bg:#f4f7fb;--line:#dbe3ea;--red:#c63838;--green:#168552}
 *{box-sizing:border-box}
@@ -44,7 +44,7 @@ td{padding:7px 8px;border-bottom:1px solid #edf1f4}
 </style>
 </head>
 <body>
-<header><div class="wrap" style="padding:0"><h1 id="pageTitle" style="margin:0;font-size:24px">🟦 リアプロ × MIO 募集比較 <span id="appVersion" style="font-size:13px;background:#fff;color:#17365d;padding:3px 7px;border-radius:999px;vertical-align:middle">v1.54</span><span class="mode-badge">リアプロ画面</span></h1>
+<header><div class="wrap" style="padding:0"><h1 id="pageTitle" style="margin:0;font-size:24px">🟦 リアプロ × MIO 募集比較 <span id="appVersion" style="font-size:13px;background:#fff;color:#17365d;padding:3px 7px;border-radius:999px;vertical-align:middle">v1.56</span><span class="mode-badge">リアプロ画面</span></h1>
 <div id="pageIntro" style="font-size:13px;color:#e8eef5;margin-top:5px">リアプロの申込系を先に分離し、募集中物件をMIOと比較します。業者名・ADは比較せず参考表示。</div><div class="mode-switch"><span>比較元：</span><button id="modeRealpro" type="button" onclick="selectSourceMode('realpro')">リアプロ</button><button id="modeItandi" type="button" onclick="selectSourceMode('itandi')">イタンジ</button></div></div></header>
 <div class="wrap">
   <div class="grid">
@@ -138,10 +138,10 @@ function selectSourceMode(mode){
 }
 (()=>{
   const isItandi=sourceLabel()==="イタンジ";
-  document.title=(isItandi?"イタンジ":"リアプロ")+" × MIO 募集比較 v1.54";
+  document.title=(isItandi?"イタンジ":"リアプロ")+" × MIO 募集比較 v1.56";
   document.body.classList.toggle("itandi-mode",isItandi);
   const h1=document.getElementById("pageTitle");
-  if(h1)h1.innerHTML=isItandi?"🟧 イタンジ × MIO 募集比較 <span id=\"appVersion\" style=\"font-size:13px;background:#fff;color:#17365d;padding:3px 7px;border-radius:999px;vertical-align:middle\">v1.54</span><span class=\"mode-badge\">イタンジ画面</span>":"🟦 リアプロ × MIO 募集比較 <span id=\"appVersion\" style=\"font-size:13px;background:#fff;color:#17365d;padding:3px 7px;border-radius:999px;vertical-align:middle\">v1.54</span><span class=\"mode-badge\">リアプロ画面</span>";
+  if(h1)h1.innerHTML=isItandi?"🟧 イタンジ × MIO 募集比較 <span id=\"appVersion\" style=\"font-size:13px;background:#fff;color:#17365d;padding:3px 7px;border-radius:999px;vertical-align:middle\">v1.56</span><span class=\"mode-badge\">イタンジ画面</span>":"🟦 リアプロ × MIO 募集比較 <span id=\"appVersion\" style=\"font-size:13px;background:#fff;color:#17365d;padding:3px 7px;border-radius:999px;vertical-align:middle\">v1.56</span><span class=\"mode-badge\">リアプロ画面</span>";
   const intro=document.getElementById("pageIntro");
   if(intro)intro.textContent=(isItandi?"イタンジ":"リアプロ")+"の申込系を先に分離し、募集中物件をMIOと比較します。業者名・ADは比較せず参考表示。";
   document.getElementById("modeRealpro")?.classList.toggle("active",!isItandi);
@@ -160,6 +160,8 @@ function norm(s){
 function cleanName(s){
   return String(s??"")
     .normalize("NFKC")
+    // 照合キー生成時だけ、物件名末尾に連続する広告・募集コメントを除去。表示名・元データは変更しない。
+    .replace(/(?:\s*(?:※[^※]*※|[★☆][^★☆]*[★☆]))+\s*$/g, "")
     .replace(/\s*-+\s*$/," ")
     .replace(/コピー/g,"")
     // 【旭化成】など、媒体側の会社・ブランド付記は照合用の物件名から外す。
@@ -183,9 +185,9 @@ function cleanName(s){
     // ジオタワー宝塚グランレジス THE NORTH の表記揺れだけ吸収。
     // 「ジオタワー宝塚グランレジス」単体とは別物件のまま。
     .replace(/ジオタワー宝塚\s*グランレジス\s*THE\s*(NORTH|SOUTH)/gi,(m,d)=>"ジオタワー宝塚グランレジスTHE"+d.toUpperCase())
-    // 末尾のローマ数字を算用数字へ統一（NFKC後は Ⅱ→II になる）
-    // 例：ヴィラミナミⅡ ⇔ ヴィラミナミ2 / RESIDENCEII ⇔ RESIDENCE2
-    .replace(/(?:IX|VIII|VII|VI|IV|V|III|II|I)$/i, m => ({I:"1",II:"2",III:"3",IV:"4",V:"5",VI:"6",VII:"7",VIII:"8",IX:"9"}[m.toUpperCase()] || m))
+    // 末尾、または英字棟表記（A棟/B棟など）の直前にあるローマ数字を算用数字へ統一。
+    // NFKC後は Ⅱ→II になる。画面表示は変更せず、照合キーだけで吸収する。
+    .replace(/(?:IX|VIII|VII|VI|IV|V|III|II|I)(?=(?:\s*[A-ZＡ-Ｚ]棟\s*)?$)/i, m => ({I:"1",II:"2",III:"3",IV:"4",V:"5",VI:"6",VII:"7",VIII:"8",IX:"9"}[m.toUpperCase()] || m))
     .trim();
 }
 
@@ -983,3 +985,6 @@ window.addEventListener('message',e=>{
   setTimeout(compactMioUploader,0);
 })();
 </script>
+
+
+
